@@ -1,4 +1,4 @@
-import type { AnnotationType, Tool, VisibilityState } from './types';
+import type { AnnotationType, Tool, VisibilityState, Season, Confidence, Priority } from './types';
 
 export const MAP_CONFIG = {
   center: [-7.135, 54.005] as [number, number],
@@ -19,35 +19,35 @@ export const ANNOTATION_COLORS: Record<AnnotationType, string> = {
 };
 
 export const ANNOTATION_LABELS: Record<AnnotationType, string> = {
-  target_zone: 'Target Zone',
-  depth_point: 'Depth Point',
-  isobath: 'Isobath Line',
-  dropoff: 'Drop-off',
-  spawn_zone: 'Spawning Zone',
-  accumulation_zone: 'Accumulation Zone',
+  target_zone: 'Zone Cible',
+  depth_point: 'Point de Profondeur',
+  isobath: 'Isobathe',
+  dropoff: 'Cassure',
+  spawn_zone: 'Zone de Fraie',
+  accumulation_zone: "Zone d'Accumulation",
   note: 'Note',
 };
 
 export const TOOL_LABELS: Record<Tool, string> = {
-  pointer: 'Pointer',
-  target_zone: 'Target Zone',
-  depth_point: 'Depth Point',
-  isobath: 'Isobath',
-  dropoff: 'Drop-off',
-  spawn_zone: 'Spawn Zone',
+  pointer: 'Sélection',
+  target_zone: 'Zone Cible',
+  depth_point: 'Profondeur',
+  isobath: 'Isobathe',
+  dropoff: 'Cassure',
+  spawn_zone: 'Fraie',
   accumulation_zone: 'Accumulation',
   note: 'Note',
 };
 
 export const DRAWING_INSTRUCTIONS: Record<Tool, string> = {
   pointer: '',
-  target_zone: 'Click on the map to place a target zone',
-  depth_point: 'Click on the map to place a depth point',
-  isobath: 'Click to add points. Double-click to finish the line.',
-  dropoff: 'Click to add points. Double-click to finish the line.',
-  spawn_zone: 'Click to add vertices. Double-click to close the polygon.',
-  accumulation_zone: 'Click to add vertices. Double-click to close the polygon.',
-  note: 'Click on the map to place a note',
+  target_zone: 'Cliquez sur la carte pour placer une zone cible',
+  depth_point: 'Cliquez sur la carte pour placer un point de profondeur',
+  isobath: 'Cliquez pour ajouter des points. Double-clic pour terminer la ligne.',
+  dropoff: 'Cliquez pour ajouter des points. Double-clic pour terminer la ligne.',
+  spawn_zone: 'Cliquez pour ajouter des sommets. Double-clic pour fermer le polygone.',
+  accumulation_zone: 'Cliquez pour ajouter des sommets. Double-clic pour fermer le polygone.',
+  note: 'Cliquez sur la carte pour placer une note',
 };
 
 export const TOOL_GEOMETRY: Record<Tool, 'point' | 'line' | 'polygon' | null> = {
@@ -61,7 +61,7 @@ export const TOOL_GEOMETRY: Record<Tool, 'point' | 'line' | 'polygon' | null> = 
   note: 'point',
 };
 
-export const PRIORITY_COLORS = {
+export const PRIORITY_COLORS: Record<Priority, string> = {
   high: '#ff4444',
   medium: '#ffaa00',
   low: '#44aa44',
@@ -80,3 +80,23 @@ export const DEFAULT_VISIBILITY: VisibilityState = {
 export const SEASONS = ['spring', 'summer', 'autumn', 'winter', 'all'] as const;
 export const CONFIDENCE_LEVELS = ['confirmed', 'likely', 'speculative'] as const;
 export const PRIORITIES = ['high', 'medium', 'low'] as const;
+
+export const SEASON_LABELS: Record<Season, string> = {
+  spring: 'Printemps',
+  summer: 'Été',
+  autumn: 'Automne',
+  winter: 'Hiver',
+  all: 'Toute saison',
+};
+
+export const CONFIDENCE_LABELS: Record<Confidence, string> = {
+  confirmed: 'Confirmé',
+  likely: 'Probable',
+  speculative: 'Spéculatif',
+};
+
+export const PRIORITY_LABELS: Record<Priority, string> = {
+  high: 'Haute',
+  medium: 'Moyenne',
+  low: 'Basse',
+};

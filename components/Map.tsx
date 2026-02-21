@@ -34,7 +34,7 @@ export function Map({ onMapReady }: MapProps) {
       accessToken: mapboxgl.accessToken as string,
       mapboxgl: mapboxgl as any,
       marker: false,
-      placeholder: 'Search places...',
+      placeholder: 'Rechercher un lieu…',
       collapsed: true,
     });
     map.addControl(geocoder, 'top-left');

@@ -9,14 +9,14 @@ export function LoginButton() {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="hidden text-sm text-white/80 md:inline">
+      <span className="hidden text-xs text-white/50 md:inline">
         {session.user.email}
       </span>
       <button
         onClick={() => signOut({ callbackUrl: '/login' })}
-        className="rounded-md bg-white/10 px-3 py-1.5 text-xs text-white/70 transition hover:bg-white/20"
+        className="btn-press rounded-lg bg-white/8 px-3 py-1.5 text-xs font-medium text-white/60 transition-colors duration-150 hover:bg-white/14 hover:text-white/80"
       >
-        Sign out
+        Déconnexion
       </button>
     </div>
   );

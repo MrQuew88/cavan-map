@@ -1,7 +1,13 @@
 'use client';
 
 import type { Annotation } from '@/lib/types';
-import { ANNOTATION_LABELS, ANNOTATION_COLORS } from '@/lib/constants';
+import {
+  ANNOTATION_LABELS,
+  ANNOTATION_COLORS,
+  SEASON_LABELS,
+  PRIORITY_LABELS,
+  CONFIDENCE_LABELS,
+} from '@/lib/constants';
 
 interface AnnotationPopupProps {
   annotation: Annotation;
@@ -14,13 +20,13 @@ export function AnnotationPopup({ annotation, onEdit, onClose }: AnnotationPopup
     <div className="min-w-[200px] p-3">
       <div className="mb-2 flex items-center gap-2">
         <div
-          className="h-3 w-3 rounded-full"
+          className="h-2.5 w-2.5 rounded-full ring-2 ring-white/10"
           style={{ backgroundColor: ANNOTATION_COLORS[annotation.type] }}
         />
-        <span className="text-xs font-medium text-white/50">
+        <span className="text-[11px] font-medium text-white/45">
           {ANNOTATION_LABELS[annotation.type]}
         </span>
-        <span className="ml-auto text-sm font-bold text-white">
+        <span className="ml-auto font-mono text-sm font-semibold text-white">
           {annotation.label}
         </span>
       </div>
@@ -28,7 +34,7 @@ export function AnnotationPopup({ annotation, onEdit, onClose }: AnnotationPopup
       {renderDetails(annotation)}
 
       {annotation.notes && (
-        <p className="mt-2 border-t border-white/10 pt-2 text-xs text-white/70">
+        <p className="mt-2 border-t border-white/8 pt-2 text-xs leading-relaxed text-white/60">
           {annotation.notes}
         </p>
       )}
@@ -36,15 +42,15 @@ export function AnnotationPopup({ annotation, onEdit, onClose }: AnnotationPopup
       <div className="mt-3 flex gap-2">
         <button
           onClick={onEdit}
-          className="flex-1 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition hover:bg-blue-700"
+          className="btn-press flex-1 rounded-lg bg-[var(--accent)] px-3 py-1.5 text-xs font-semibold text-white transition-colors duration-150 hover:bg-[var(--accent-hover)]"
         >
-          Edit
+          Modifier
         </button>
         <button
           onClick={onClose}
-          className="rounded-md bg-white/10 px-3 py-1.5 text-xs text-white/70 transition hover:bg-white/20"
+          className="btn-press rounded-lg bg-white/8 px-3 py-1.5 text-xs font-medium text-white/60 transition-colors duration-150 hover:bg-white/14"
         >
-          Close
+          Fermer
         </button>
       </div>
     </div>
@@ -56,19 +62,19 @@ function renderDetails(annotation: Annotation) {
     case 'target_zone':
       return (
         <div className="flex flex-wrap gap-1.5 text-xs">
-          <Tag>{annotation.priority}</Tag>
-          <Tag>{annotation.season}</Tag>
+          <Tag>{PRIORITY_LABELS[annotation.priority]}</Tag>
+          <Tag>{SEASON_LABELS[annotation.season]}</Tag>
           {annotation.species && <Tag>{annotation.species}</Tag>}
           {annotation.technique && <Tag>{annotation.technique}</Tag>}
         </div>
       );
     case 'depth_point':
-      return <div className="text-sm font-mono text-blue-300">{annotation.depth}{annotation.unit}</div>;
+      return <div className="font-mono text-sm text-blue-300">{annotation.depth}{annotation.unit}</div>;
     case 'isobath':
-      return <div className="text-sm font-mono text-teal-300">{annotation.depth}{annotation.unit}</div>;
+      return <div className="font-mono text-sm text-teal-300">{annotation.depth}{annotation.unit}</div>;
     case 'dropoff':
       return (
-        <div className="text-sm font-mono text-red-300">
+        <div className="font-mono text-sm text-red-300">
           {annotation.shallowDepth}{annotation.unit} → {annotation.deepDepth}{annotation.unit}
         </div>
       );
@@ -76,16 +82,16 @@ function renderDetails(annotation: Annotation) {
       return (
         <div className="flex flex-wrap gap-1.5 text-xs">
           {annotation.species && <Tag>{annotation.species}</Tag>}
-          <Tag>{annotation.season}</Tag>
-          <Tag>{annotation.confidence}</Tag>
+          <Tag>{SEASON_LABELS[annotation.season]}</Tag>
+          <Tag>{CONFIDENCE_LABELS[annotation.confidence]}</Tag>
         </div>
       );
     case 'accumulation_zone':
       return (
         <div className="flex flex-wrap gap-1.5 text-xs">
           {annotation.foodType && <Tag>{annotation.foodType}</Tag>}
-          <Tag>{annotation.season}</Tag>
-          <Tag>{annotation.confidence}</Tag>
+          <Tag>{SEASON_LABELS[annotation.season]}</Tag>
+          <Tag>{CONFIDENCE_LABELS[annotation.confidence]}</Tag>
         </div>
       );
     case 'note':
@@ -95,7 +101,7 @@ function renderDetails(annotation: Annotation) {
 
 function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-md bg-white/10 px-2 py-0.5 text-white/70">
+    <span className="rounded-md bg-white/8 px-2 py-0.5 text-[11px] text-white/60">
       {children}
     </span>
   );

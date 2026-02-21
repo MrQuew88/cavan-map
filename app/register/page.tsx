@@ -24,7 +24,12 @@ export default function RegisterPage() {
 
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error || 'Registration failed');
+      const messages: Record<string, string> = {
+        'Email and password are required': "L'adresse e-mail et le mot de passe sont requis",
+        'Password must be at least 8 characters': 'Le mot de passe doit contenir au moins 8 caractères',
+        'Email already registered': 'Cette adresse e-mail est déjà utilisée',
+      };
+      setError(messages[data.error] || "L'inscription a échoué");
       setLoading(false);
       return;
     }
@@ -33,29 +38,31 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-[#0a0a0a]">
-      <div className="w-full max-w-sm rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
-        <h1 className="mb-2 text-2xl font-bold text-white">Cavan Map</h1>
-        <p className="mb-8 text-sm text-white/60">
-          Create an account
+    <div className="flex min-h-dvh items-center justify-center bg-[#0a0a0a] px-4">
+      <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center shadow-2xl shadow-black/30">
+        <h1 className="mb-1 text-xl font-semibold tracking-tight text-white">
+          Cavan Map
+        </h1>
+        <p className="mb-8 text-[13px] text-white/40">
+          Créer un compte
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3.5">
           <input
             type="email"
-            placeholder="Email"
+            placeholder="Adresse e-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/40 outline-none focus:border-white/30"
+            className="input-field py-3"
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Mot de passe (8 caractères min.)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
             minLength={8}
-            className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-white/40 outline-none focus:border-white/30"
+            className="input-field py-3"
           />
           {error && (
             <p className="text-sm text-red-400">{error}</p>
@@ -63,15 +70,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-white px-4 py-3 font-medium text-black transition hover:bg-white/90 disabled:opacity-50"
+            className="btn-press w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black transition-opacity duration-150 hover:opacity-90 disabled:opacity-40"
           >
-            {loading ? 'Creating account…' : 'Create account'}
+            {loading ? 'Création…' : 'Créer le compte'}
           </button>
         </form>
-        <p className="mt-6 text-sm text-white/40">
-          Already have an account?{' '}
-          <Link href="/login" className="text-white/70 underline hover:text-white">
-            Sign in
+        <p className="mt-6 text-[13px] text-white/30">
+          Déjà un compte ?{' '}
+          <Link href="/login" className="text-white/60 underline underline-offset-2 transition-colors duration-150 hover:text-white">
+            Se connecter
           </Link>
         </p>
       </div>

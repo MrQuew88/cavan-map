@@ -40,7 +40,6 @@ export function BottomSheet({
     currentState.current = state;
   }, [state]);
 
-  // Open when editing
   useEffect(() => {
     if (formMode) setState('half');
   }, [formMode]);
@@ -54,10 +53,8 @@ export function BottomSheet({
     const threshold = 50;
 
     if (deltaY > threshold) {
-      // Swipe up
       setState((s) => (s === 'collapsed' ? 'half' : s === 'half' ? 'full' : 'full'));
     } else if (deltaY < -threshold) {
-      // Swipe down
       setState((s) => (s === 'full' ? 'half' : s === 'half' ? 'collapsed' : 'collapsed'));
     }
   }, []);
@@ -70,7 +67,7 @@ export function BottomSheet({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-40 rounded-t-2xl border-t border-white/10 bg-[#0f0f1a] transition-[height] duration-300 ease-out ${heightClass}`}
+      className={`fixed bottom-0 left-0 right-0 z-40 rounded-t-2xl border-t border-white/8 bg-[var(--panel)] shadow-2xl shadow-black/40 transition-[height] duration-300 ease-out ${heightClass}`}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -81,7 +78,7 @@ export function BottomSheet({
         }
         className="flex w-full items-center justify-center py-2"
       >
-        <div className="h-1 w-10 rounded-full bg-white/30" />
+        <div className="h-1 w-10 rounded-full bg-white/20" />
       </button>
 
       {state !== 'collapsed' && (

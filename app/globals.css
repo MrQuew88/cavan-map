@@ -1,14 +1,26 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
 :root {
   --background: #0a0a0a;
-  --foreground: #ededed;
+  --foreground: #e0e0e0;
+  --panel: #0c0c18;
+  --panel-raised: #12122a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.16);
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --destructive: #ef4444;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* Mapbox overrides */
@@ -17,37 +29,38 @@ body {
 }
 
 .mapboxgl-popup-content {
-  background: #1a1a2e !important;
-  color: #ededed !important;
-  border-radius: 8px !important;
+  background: var(--panel-raised) !important;
+  color: var(--foreground) !important;
+  border-radius: 12px !important;
   padding: 0 !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid var(--border) !important;
 }
 
 .mapboxgl-popup-tip {
-  border-top-color: #1a1a2e !important;
+  border-top-color: var(--panel-raised) !important;
 }
 
 .mapboxgl-popup-close-button {
-  color: #ededed !important;
+  color: var(--foreground) !important;
   font-size: 18px !important;
   padding: 4px 8px !important;
 }
 
 /* Mapbox Geocoder dark theme */
 .mapboxgl-ctrl-geocoder {
-  background-color: #1a1a2e !important;
-  color: #ededed !important;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 8px !important;
-  font-family: system-ui, -apple-system, sans-serif !important;
+  background-color: var(--panel-raised) !important;
+  color: var(--foreground) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  font-family: var(--font-sans) !important;
 }
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--input {
-  color: #ededed !important;
+  color: var(--foreground) !important;
 }
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--input::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
+  color: rgba(255, 255, 255, 0.35) !important;
 }
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--input:focus {
   outline: none !important;
@@ -56,20 +69,20 @@ body {
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search,
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-close,
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--button {
-  fill: #ededed !important;
+  fill: var(--foreground) !important;
 }
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions {
-  background-color: #1a1a2e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  background-color: var(--panel-raised) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
 }
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > li > a {
-  color: #ededed !important;
+  color: var(--foreground) !important;
 }
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > .active > a,
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > li > a:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
 }
 .mapboxgl-ctrl-geocoder--powered-by {
@@ -88,19 +101,41 @@ body {
 /* Form inputs */
 .input-field {
   width: 100%;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
   color: white;
-  font-size: 14px;
+  font-size: 13px;
+  font-family: var(--font-sans);
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 .input-field:focus {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 .input-field option {
-  background: #1a1a2e;
+  background: var(--panel-raised);
   color: white;
+}
+
+/* Button press feedback (Emil Kowalski: scale 0.97 on press) */
+.btn-press {
+  transition: transform 0.15s ease-out, background-color 0.15s ease-out, opacity 0.15s ease-out;
+}
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

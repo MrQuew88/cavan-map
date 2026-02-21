@@ -11,7 +11,6 @@ import { Toolbar } from '@/components/Toolbar';
 import { Sidebar } from '@/components/Sidebar';
 import { BottomSheet } from '@/components/BottomSheet';
 import { AnnotationRenderer } from '@/components/AnnotationRenderer';
-import { AnnotationPopup } from '@/components/AnnotationPopup';
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog';
 import { LoginButton } from '@/components/LoginButton';
 import { useAnnotations } from '@/hooks/useAnnotations';
@@ -81,7 +80,6 @@ export default function HomePage() {
   const [deleteTarget, setDeleteTarget] = useState<Annotation | null>(null);
   const [popup, setPopup] = useState<mapboxgl.Popup | null>(null);
 
-  // Redirect if not authenticated
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
   }, [status, router]);
@@ -141,7 +139,6 @@ export default function HomePage() {
     onPolygonComplete: handlePolygonComplete,
   });
 
-  // Escape key handler
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -158,7 +155,6 @@ export default function HomePage() {
     (ann: Annotation) => {
       setSelectedAnnotation(ann);
 
-      // Show popup on map
       if (popup) popup.remove();
 
       if (!map) return;
@@ -167,7 +163,6 @@ export default function HomePage() {
       if ('position' in ann) {
         lngLat = [ann.position.lng, ann.position.lat];
       } else if ('points' in ann && ann.points.length > 0) {
-        // Center of points
         const avgLng = ann.points.reduce((s, p) => s + p.lng, 0) / ann.points.length;
         const avgLat = ann.points.reduce((s, p) => s + p.lat, 0) / ann.points.length;
         lngLat = [avgLng, avgLat];
@@ -179,12 +174,11 @@ export default function HomePage() {
       const root = document.createElement('div');
       container.appendChild(root);
 
-      // Render popup content
       root.innerHTML = `
-        <div style="min-width:180px;padding:12px">
-          <div style="font-weight:bold;color:white;margin-bottom:4px">${ann.label}</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:8px">${ann.notes || 'No notes'}</div>
-          <button id="popup-edit" style="background:#2563eb;color:white;border:none;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer;width:100%">Edit</button>
+        <div style="min-width:180px;padding:12px;font-family:'DM Sans',system-ui,sans-serif">
+          <div style="font-weight:600;color:white;margin-bottom:4px;font-size:14px">${ann.label}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:10px;line-height:1.4">${ann.notes || 'Aucune note'}</div>
+          <button id="popup-edit" style="background:var(--accent,#3b82f6);color:white;border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;width:100%;font-family:inherit;transition:background 0.15s ease-out">Modifier</button>
         </div>
       `;
 
@@ -260,7 +254,10 @@ export default function HomePage() {
   if (status === 'loading') {
     return (
       <div className="flex h-dvh items-center justify-center bg-[#0a0a0a]">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+        <div className="flex flex-col items-center gap-3">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/10 border-t-white/70" />
+          <span className="text-xs text-white/30">Chargement…</span>
+        </div>
       </div>
     );
   }
@@ -286,16 +283,16 @@ export default function HomePage() {
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
       {/* Header */}
-      <header className="flex h-12 items-center justify-between border-b border-white/10 bg-[#0f0f1a]/95 px-4 backdrop-blur-sm">
-        <h1 className="text-sm font-bold text-white">Cavan Map</h1>
+      <header className="flex h-11 items-center justify-between border-b border-white/6 bg-[var(--panel)]/95 px-4 backdrop-blur-md">
+        <h1 className="text-[13px] font-semibold tracking-tight text-white/90">
+          Cavan Map
+        </h1>
         <LoginButton />
       </header>
 
       <div className="relative flex flex-1 overflow-hidden">
-        {/* Desktop Sidebar */}
         {isDesktop && <Sidebar {...sharedProps} />}
 
-        {/* Map */}
         <div className="relative flex-1">
           <Map onMapReady={setMap} />
 
@@ -306,13 +303,11 @@ export default function HomePage() {
             onAnnotationClick={handleAnnotationClick}
           />
 
-          {/* Toolbar - positioned above map */}
           <div className="absolute left-1/2 top-3 z-10 -translate-x-1/2">
             <Toolbar activeTool={activeTool} onToolChange={setActiveTool} />
           </div>
         </div>
 
-        {/* Mobile Bottom Sheet */}
         {!isDesktop && <BottomSheet {...sharedProps} />}
       </div>
 

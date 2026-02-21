@@ -16,25 +16,30 @@ export function DeleteConfirmDialog({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-xl border border-white/10 bg-[#1a1a2e] p-6">
-        <h3 className="mb-2 text-lg font-semibold text-white">Delete annotation</h3>
-        <p className="mb-6 text-sm text-white/60">
-          Are you sure you want to delete <strong className="text-white">{label}</strong>?
-          This action cannot be undone.
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div
+        className="w-full max-w-sm rounded-2xl border border-white/8 bg-[var(--panel-raised)] p-6 shadow-2xl"
+        style={{ animation: 'fadeScale 0.2s ease-out' }}
+      >
+        <h3 className="mb-2 text-base font-semibold text-white">
+          Supprimer l'annotation
+        </h3>
+        <p className="mb-6 text-sm leading-relaxed text-white/50">
+          Voulez-vous vraiment supprimer <strong className="text-white">{label}</strong> ?
+          Cette action est irréversible.
         </p>
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-2">
           <button
             onClick={onCancel}
-            className="rounded-lg bg-white/10 px-4 py-2 text-sm text-white transition hover:bg-white/20"
+            className="btn-press rounded-lg bg-white/8 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-150 hover:bg-white/14"
           >
-            Cancel
+            Annuler
           </button>
           <button
             onClick={onConfirm}
-            className="rounded-lg bg-red-600 px-4 py-2 text-sm text-white transition hover:bg-red-700"
+            className="btn-press rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-500"
           >
-            Delete
+            Supprimer
           </button>
         </div>
       </div>

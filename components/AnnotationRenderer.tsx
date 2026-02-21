@@ -24,7 +24,6 @@ export function AnnotationRenderer({
   useEffect(() => {
     if (!map) return;
 
-    // Clear existing markers
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
 
@@ -35,14 +34,18 @@ export function AnnotationRenderer({
         const el = document.createElement('div');
         el.className = 'target-zone-marker';
         el.style.cssText = `
-          width: 36px; height: 36px; border-radius: 50%;
+          width: 34px; height: 34px; border-radius: 50%;
           background: ${ANNOTATION_COLORS.target_zone};
-          border: 3px solid ${PRIORITY_COLORS[ann.priority]};
+          border: 2.5px solid ${PRIORITY_COLORS[ann.priority]};
           display: flex; align-items: center; justify-content: center;
-          font-size: 14px; font-weight: bold; color: white;
-          cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+          font-size: 12px; font-weight: 600; color: white;
+          cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+          font-family: 'JetBrains Mono', monospace;
+          transition: transform 0.15s ease-out;
         `;
         el.textContent = ann.label;
+        el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.12)'; });
+        el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
         el.addEventListener('click', (e) => {
           e.stopPropagation();
           onAnnotationClick(ann);
@@ -59,10 +62,15 @@ export function AnnotationRenderer({
         el.style.cssText = `
           background: ${ANNOTATION_COLORS.depth_point}; border-radius: 50%;
           width: 24px; height: 24px; display: flex; align-items: center;
-          justify-content: center; font-size: 10px; font-weight: bold;
+          justify-content: center; font-size: 10px; font-weight: 600;
           color: white; cursor: pointer; border: 2px solid rgba(0,0,0,0.3);
+          font-family: 'JetBrains Mono', monospace;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+          transition: transform 0.15s ease-out;
         `;
         el.textContent = `${ann.depth}`;
+        el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.15)'; });
+        el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
         el.addEventListener('click', (e) => {
           e.stopPropagation();
           onAnnotationClick(ann);
@@ -77,15 +85,18 @@ export function AnnotationRenderer({
       if (ann.type === 'note') {
         const el = document.createElement('div');
         el.style.cssText = `
-          width: 28px; height: 28px; background: white; border-radius: 50% 50% 50% 0;
+          width: 26px; height: 26px; background: white; border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg); cursor: pointer;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+          box-shadow: 0 2px 10px rgba(0,0,0,0.5);
           display: flex; align-items: center; justify-content: center;
+          transition: transform 0.15s ease-out;
         `;
         const inner = document.createElement('span');
-        inner.style.cssText = `transform: rotate(45deg); font-size: 12px; font-weight: bold; color: #333;`;
+        inner.style.cssText = `transform: rotate(45deg); font-size: 11px; font-weight: 600; color: #1a1a2e; font-family: 'JetBrains Mono', monospace;`;
         inner.textContent = ann.label;
         el.appendChild(inner);
+        el.addEventListener('mouseenter', () => { el.style.transform = 'rotate(-45deg) scale(1.12)'; });
+        el.addEventListener('mouseleave', () => { el.style.transform = 'rotate(-45deg) scale(1)'; });
         el.addEventListener('click', (e) => {
           e.stopPropagation();
           onAnnotationClick(ann);
@@ -151,7 +162,6 @@ export function AnnotationRenderer({
       };
     });
 
-    // Update or create sources
     const lineData: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: lineFeatures };
     const polyData: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: polyFeatures };
 
@@ -182,6 +192,7 @@ export function AnnotationRenderer({
           'symbol-placement': 'line-center',
           'text-field': ['get', 'label'],
           'text-size': 12,
+          'text-font': ['DIN Pro Medium', 'Arial Unicode MS Regular'],
           'text-offset': [0, -1],
         },
         paint: {
@@ -202,7 +213,7 @@ export function AnnotationRenderer({
         source: 'annotation-polygons',
         paint: {
           'fill-color': ['get', 'color'],
-          'fill-opacity': 0.2,
+          'fill-opacity': 0.18,
         },
       });
       map.addLayer({
@@ -222,7 +233,6 @@ export function AnnotationRenderer({
       });
     }
 
-    // Click handlers for layers
     const handleLineClick = (e: mapboxgl.MapMouseEvent) => {
       if (!e.features?.length) return;
       const id = e.features[0].properties?.id;

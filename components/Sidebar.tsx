@@ -30,9 +30,11 @@ export function Sidebar({
   formMode,
 }: SidebarProps) {
   return (
-    <div className="flex h-full w-80 flex-col border-r border-white/10 bg-[#0f0f1a]">
-      <div className="border-b border-white/10 px-4 py-3">
-        <h2 className="text-sm font-semibold text-white/80">Annotations</h2>
+    <div className="flex h-full w-80 flex-col border-r border-white/6 bg-[var(--panel)]">
+      <div className="border-b border-white/6 px-4 py-3">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-white/40">
+          Annotations
+        </h2>
       </div>
 
       {formMode && editingAnnotation ? (

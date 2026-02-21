@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Cavan Map',
-  description: 'Fishing spot annotation tool for Lough Oughter, Co. Cavan',
+  description: "Outil d'annotation cartographique pour la pêche — Lough Oughter, Co. Cavan",
 };
 
 export const viewport: Viewport = {
@@ -19,8 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-[#0a0a0a] text-white antialiased">
+    <html lang="fr" className="dark">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="bg-[#0a0a0a] font-sans text-white antialiased">
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
