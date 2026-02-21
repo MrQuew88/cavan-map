@@ -80,6 +80,13 @@ export async function deleteAnnotation(id: string, userId: string): Promise<bool
 }
 
 export const MIGRATION_SQL = `
+CREATE TABLE IF NOT EXISTS users (
+  id VARCHAR(36) PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS annotations (
   id VARCHAR(36) PRIMARY KEY,
   type VARCHAR(50) NOT NULL,

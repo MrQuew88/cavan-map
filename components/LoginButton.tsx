@@ -9,15 +9,8 @@ export function LoginButton() {
 
   return (
     <div className="flex items-center gap-3">
-      {session.user.image && (
-        <img
-          src={session.user.image}
-          alt=""
-          className="h-8 w-8 rounded-full"
-        />
-      )}
       <span className="hidden text-sm text-white/80 md:inline">
-        {session.user.name}
+        {session.user.email}
       </span>
       <button
         onClick={() => signOut({ callbackUrl: '/login' })}
