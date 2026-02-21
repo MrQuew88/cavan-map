@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { MAP_CONFIG } from '@/lib/constants';
 
 interface MapProps {
@@ -27,6 +29,15 @@ export function Map({ onMapReady }: MapProps) {
       maxZoom: MAP_CONFIG.maxZoom,
       doubleClickZoom: false,
     });
+
+    const geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken as string,
+      mapboxgl: mapboxgl as any,
+      marker: false,
+      placeholder: 'Search places...',
+      collapsed: true,
+    });
+    map.addControl(geocoder, 'top-left');
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.addControl(
