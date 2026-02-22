@@ -37,21 +37,23 @@ export function AnnotationRenderer({
         el.setAttribute('role', 'button');
         el.setAttribute('aria-label', `Zone Cible ${ann.label}`);
         el.setAttribute('tabindex', '0');
-        el.style.cssText = `
+        el.style.cssText = `cursor: pointer;`;
+        const inner = document.createElement('div');
+        inner.style.cssText = `
           width: 32px; height: 32px; border-radius: 50%;
           background: ${ANNOTATION_COLORS.target_zone};
           border: 2px solid ${PRIORITY_COLORS[ann.priority]};
           display: flex; align-items: center; justify-content: center;
           font-size: 11px; font-weight: 600; color: white;
-          cursor: pointer;
           box-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2);
           font-family: ${MARKER_FONT};
           transition: transform 0.15s ${EASE_OUT}, box-shadow 0.15s ${EASE_OUT};
           will-change: transform;
         `;
-        el.textContent = ann.label;
-        el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.15)'; el.style.boxShadow = `0 4px 20px rgba(0,0,0,0.6), 0 0 0 2px ${ANNOTATION_COLORS.target_zone}40`; });
-        el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; el.style.boxShadow = '0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2)'; });
+        inner.textContent = ann.label;
+        el.appendChild(inner);
+        el.addEventListener('mouseenter', () => { inner.style.transform = 'scale(1.15)'; inner.style.boxShadow = `0 4px 20px rgba(0,0,0,0.6), 0 0 0 2px ${ANNOTATION_COLORS.target_zone}40`; });
+        el.addEventListener('mouseleave', () => { inner.style.transform = 'scale(1)'; inner.style.boxShadow = '0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2)'; });
         const handleClick = (e: Event) => { e.stopPropagation(); onAnnotationClick(ann); };
         el.addEventListener('click', handleClick);
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } });
@@ -67,19 +69,22 @@ export function AnnotationRenderer({
         el.setAttribute('role', 'button');
         el.setAttribute('aria-label', `Point de Profondeur ${ann.depth}${ann.unit}`);
         el.setAttribute('tabindex', '0');
-        el.style.cssText = `
+        el.style.cssText = `cursor: pointer;`;
+        const inner = document.createElement('div');
+        inner.style.cssText = `
           background: ${ANNOTATION_COLORS.depth_point}; border-radius: 50%;
           width: 22px; height: 22px; display: flex; align-items: center;
           justify-content: center; font-size: 9px; font-weight: 600;
-          color: white; cursor: pointer; border: 1.5px solid rgba(0,0,0,0.3);
+          color: white; border: 1.5px solid rgba(0,0,0,0.3);
           font-family: ${MARKER_FONT};
           box-shadow: 0 2px 8px rgba(0,0,0,0.4);
           transition: transform 0.15s ${EASE_OUT};
           will-change: transform;
         `;
-        el.textContent = `${ann.depth}`;
-        el.addEventListener('mouseenter', () => { el.style.transform = 'scale(1.2)'; });
-        el.addEventListener('mouseleave', () => { el.style.transform = 'scale(1)'; });
+        inner.textContent = `${ann.depth}`;
+        el.appendChild(inner);
+        el.addEventListener('mouseenter', () => { inner.style.transform = 'scale(1.2)'; });
+        el.addEventListener('mouseleave', () => { inner.style.transform = 'scale(1)'; });
         const handleClick = (e: Event) => { e.stopPropagation(); onAnnotationClick(ann); };
         el.addEventListener('click', handleClick);
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } });
@@ -95,9 +100,11 @@ export function AnnotationRenderer({
         el.setAttribute('role', 'button');
         el.setAttribute('aria-label', `Note ${ann.label}`);
         el.setAttribute('tabindex', '0');
-        el.style.cssText = `
+        el.style.cssText = `cursor: pointer;`;
+        const outer = document.createElement('div');
+        outer.style.cssText = `
           width: 24px; height: 24px; background: white; border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg); cursor: pointer;
+          transform: rotate(-45deg);
           box-shadow: 0 2px 10px rgba(0,0,0,0.5);
           display: flex; align-items: center; justify-content: center;
           transition: transform 0.15s ${EASE_OUT};
@@ -106,9 +113,10 @@ export function AnnotationRenderer({
         const inner = document.createElement('span');
         inner.style.cssText = `transform: rotate(45deg); font-size: 10px; font-weight: 600; color: #06060c; font-family: ${MARKER_FONT};`;
         inner.textContent = ann.label;
-        el.appendChild(inner);
-        el.addEventListener('mouseenter', () => { el.style.transform = 'rotate(-45deg) scale(1.15)'; });
-        el.addEventListener('mouseleave', () => { el.style.transform = 'rotate(-45deg) scale(1)'; });
+        outer.appendChild(inner);
+        el.appendChild(outer);
+        el.addEventListener('mouseenter', () => { outer.style.transform = 'rotate(-45deg) scale(1.15)'; });
+        el.addEventListener('mouseleave', () => { outer.style.transform = 'rotate(-45deg) scale(1)'; });
         const handleClick = (e: Event) => { e.stopPropagation(); onAnnotationClick(ann); };
         el.addEventListener('click', handleClick);
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } });
