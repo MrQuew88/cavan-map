@@ -10,20 +10,23 @@ export async function getAnnotations(userId: string): Promise<Annotation[]> {
     ORDER BY created_at ASC
   `;
 
-  return rows.map((row) => ({
-    ...JSON.parse(row.data),
-    id: row.id,
-    type: row.type,
-    userId: row.userId,
-    label: row.label,
-    notes: row.notes,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
-  }));
+  return rows.map((row) => {
+    const parsed = typeof row.data === 'string' ? JSON.parse(row.data) : (row.data ?? {});
+    return {
+      ...parsed,
+      id: row.id,
+      type: row.type,
+      userId: row.userId,
+      label: row.label,
+      notes: row.notes ?? '',
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+    };
+  });
 }
 
 export async function createAnnotation(annotation: Annotation): Promise<Annotation> {
-  const { id, type, userId, label, notes, ...rest } = annotation;
+  const { id, type, userId, label, notes, createdAt: _ca, updatedAt: _ua, ...rest } = annotation;
   const data = JSON.stringify(rest);
 
   await sql`
@@ -46,7 +49,7 @@ export async function updateAnnotation(
   if (existing.rows.length === 0) return null;
 
   const row = existing.rows[0];
-  const currentData = JSON.parse(row.data);
+  const currentData = typeof row.data === 'string' ? JSON.parse(row.data) : (row.data ?? {});
   const { type: _t, userId: _u, id: _i, createdAt: _c, updatedAt: _up, label, notes, ...restUpdates } = updates as Record<string, unknown>;
 
   const newData = JSON.stringify({ ...currentData, ...restUpdates });
