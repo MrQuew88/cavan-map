@@ -1,40 +1,75 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'DM Sans', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: 'Lexend', system-ui, sans-serif;
+  --font-mono: 'Azeret Mono', 'Fira Code', ui-monospace, monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-ios: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #e0e0e0;
-  --panel: #0c0c18;
-  --panel-raised: #12122a;
-  --border: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.16);
-  --accent: #3b82f6;
-  --accent-hover: #2563eb;
-  --destructive: #ef4444;
+  --bg: #06060c;
+  --panel: #0a0a16;
+  --panel-raised: #111124;
+  --surface: #18183a;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text-primary: #f0f0f5;
+  --text-secondary: #8888a0;
+  --text-tertiary: #555570;
+  --accent: #22d3ee;
+  --accent-hover: #06b6d4;
+  --accent-muted: rgba(34, 211, 238, 0.12);
+  --destructive: #f43f5e;
+  --destructive-muted: rgba(244, 63, 94, 0.15);
+  --focus-ring: rgba(34, 211, 238, 0.5);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text-primary);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Mapbox overrides */
+/* ── Focus ── */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── Skip link (accessibility) ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 100;
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 0 0 8px 8px;
+  transition: top 0.2s var(--ease-out-expo);
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── Mapbox controls ── */
 .mapboxgl-ctrl-attrib {
   font-size: 10px !important;
+  opacity: 0.5 !important;
 }
 
 .mapboxgl-popup-content {
   background: var(--panel-raised) !important;
-  color: var(--foreground) !important;
-  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  border-radius: 14px !important;
   padding: 0 !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
-  border: 1px solid var(--border) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border) !important;
+  border: none !important;
 }
 
 .mapboxgl-popup-tip {
@@ -42,25 +77,30 @@ body {
 }
 
 .mapboxgl-popup-close-button {
-  color: var(--foreground) !important;
+  color: var(--text-secondary) !important;
   font-size: 18px !important;
   padding: 4px 8px !important;
+  transition: color 0.15s var(--ease-out-expo) !important;
+}
+.mapboxgl-popup-close-button:hover {
+  color: var(--text-primary) !important;
 }
 
-/* Mapbox Geocoder dark theme */
+/* ── Mapbox Geocoder ── */
 .mapboxgl-ctrl-geocoder {
   background-color: var(--panel-raised) !important;
-  color: var(--foreground) !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 10px !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border) !important;
+  border-radius: 12px !important;
+  border: none !important;
   font-family: var(--font-sans) !important;
 }
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--input {
-  color: var(--foreground) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-sans) !important;
 }
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--input::placeholder {
-  color: rgba(255, 255, 255, 0.35) !important;
+  color: var(--text-tertiary) !important;
 }
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--input:focus {
   outline: none !important;
@@ -69,73 +109,115 @@ body {
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-search,
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--icon-close,
 .mapboxgl-ctrl-geocoder .mapboxgl-ctrl-geocoder--button {
-  fill: var(--foreground) !important;
+  fill: var(--text-secondary) !important;
 }
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions {
   background-color: var(--panel-raised) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 10px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border) !important;
+  border: none !important;
+  overflow: hidden !important;
 }
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > li > a {
-  color: var(--foreground) !important;
+  color: var(--text-primary) !important;
+  padding: 10px 14px !important;
+  font-size: 13px !important;
 }
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > .active > a,
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > li > a:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: var(--accent-muted) !important;
   color: #fff !important;
 }
 .mapboxgl-ctrl-geocoder--powered-by {
   display: none !important;
 }
 
-/* Hide scrollbar for annotation list */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
+/* ── Scrollbar ── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-/* Form inputs */
+/* ── Form inputs ── */
 .input-field {
   width: 100%;
-  padding: 9px 12px;
+  padding: 10px 13px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.04);
-  color: white;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
   font-size: 13px;
   font-family: var(--font-sans);
+  line-height: 1.5;
   outline: none;
-  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+  transition: border-color 0.2s var(--ease-out-expo),
+              box-shadow 0.2s var(--ease-out-expo);
+}
+.input-field:hover {
+  border-color: var(--border-hover);
 }
 .input-field:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 3px var(--accent-muted);
 }
 .input-field::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-tertiary);
 }
 .input-field option {
   background: var(--panel-raised);
-  color: white;
+  color: var(--text-primary);
 }
 
-/* Button press feedback (Emil Kowalski: scale 0.97 on press) */
+/* ── Buttons ── */
 .btn-press {
-  transition: transform 0.15s ease-out, background-color 0.15s ease-out, opacity 0.15s ease-out;
+  transition: transform 0.12s var(--ease-out-expo),
+              background-color 0.15s var(--ease-out-expo),
+              opacity 0.15s var(--ease-out-expo),
+              box-shadow 0.15s var(--ease-out-expo);
+  will-change: transform;
 }
 .btn-press:active {
   transform: scale(0.97);
 }
 
-/* Reduced motion */
+/* ── Dialog animation ── */
+@keyframes dialog-enter {
+  from { opacity: 0; transform: scale(0.95) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes dialog-overlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Stagger children reveal ── */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.stagger-enter > * {
+  opacity: 0;
+  animation: fade-in-up 0.25s var(--ease-out-expo) forwards;
+}
+.stagger-enter > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-enter > *:nth-child(2) { animation-delay: 30ms; }
+.stagger-enter > *:nth-child(3) { animation-delay: 60ms; }
+.stagger-enter > *:nth-child(4) { animation-delay: 90ms; }
+.stagger-enter > *:nth-child(5) { animation-delay: 120ms; }
+.stagger-enter > *:nth-child(6) { animation-delay: 150ms; }
+.stagger-enter > *:nth-child(7) { animation-delay: 180ms; }
+
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* Keep opacity transitions as fallback (Emil Kowalski rule) */
+  .btn-press,
+  .input-field {
+    transition: opacity 0.15s ease-out !important;
+  }
+  .btn-press:active {
+    transform: none !important;
+    opacity: 0.85;
   }
 }

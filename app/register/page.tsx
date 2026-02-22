@@ -38,46 +38,67 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-[#0a0a0a] px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-white/[0.03] p-8 text-center shadow-2xl shadow-black/30">
-        <h1 className="mb-1 text-xl font-semibold tracking-tight text-white">
-          Cavan Map
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[var(--bg)] px-4">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-40"
+        style={{
+          background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 70%)',
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative w-full max-w-[360px] rounded-2xl bg-[var(--panel)]/80 p-8 text-center shadow-2xl shadow-black/40 ring-1 ring-[var(--border)] backdrop-blur-xl">
+        <h1 className="mb-1 text-lg font-semibold tracking-tight text-[var(--text-primary)]">
+          Cavan<span className="ml-0.5 font-light text-[var(--text-tertiary)]">Map</span>
         </h1>
-        <p className="mb-8 text-[13px] text-white/40">
+        <p className="mb-7 text-[12px] font-light text-[var(--text-tertiary)]">
           Créer un compte
         </p>
-        <form onSubmit={handleSubmit} className="space-y-3.5">
-          <input
-            type="email"
-            placeholder="Adresse e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="input-field py-3"
-          />
-          <input
-            type="password"
-            placeholder="Mot de passe (8 caractères min.)"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={8}
-            className="input-field py-3"
-          />
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <div>
+            <label htmlFor="register-email" className="sr-only">Adresse e-mail</label>
+            <input
+              id="register-email"
+              type="email"
+              placeholder="Adresse e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              className="input-field py-3"
+            />
+          </div>
+          <div>
+            <label htmlFor="register-password" className="sr-only">Mot de passe</label>
+            <input
+              id="register-password"
+              type="password"
+              placeholder="Mot de passe (8 caractères min.)"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={8}
+              autoComplete="new-password"
+              className="input-field py-3"
+            />
+          </div>
           {error && (
-            <p className="text-sm text-red-400">{error}</p>
+            <p role="alert" aria-live="assertive" className="text-[13px] text-[var(--destructive)]">
+              {error}
+            </p>
           )}
           <button
             type="submit"
             disabled={loading}
-            className="btn-press w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black transition-opacity duration-150 hover:opacity-90 disabled:opacity-40"
+            className="btn-press w-full rounded-xl py-3 text-[13px] font-semibold transition-opacity duration-150 disabled:opacity-40"
+            style={{ backgroundColor: 'var(--accent)', color: 'var(--bg)' }}
           >
             {loading ? 'Création…' : 'Créer le compte'}
           </button>
         </form>
-        <p className="mt-6 text-[13px] text-white/30">
+        <p className="mt-6 text-[12px] text-[var(--text-tertiary)]">
           Déjà un compte ?{' '}
-          <Link href="/login" className="text-white/60 underline underline-offset-2 transition-colors duration-150 hover:text-white">
+          <Link href="/login" className="font-medium text-[var(--accent)] underline-offset-2 transition-colors duration-150 hover:underline">
             Se connecter
           </Link>
         </p>

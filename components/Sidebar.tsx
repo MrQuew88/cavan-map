@@ -30,11 +30,17 @@ export function Sidebar({
   formMode,
 }: SidebarProps) {
   return (
-    <div className="flex h-full w-80 flex-col border-r border-white/6 bg-[var(--panel)]">
-      <div className="border-b border-white/6 px-4 py-3">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-white/40">
+    <nav
+      aria-label="Panneau d'annotations"
+      className="flex h-full w-80 flex-col border-r border-[var(--border)] bg-[var(--panel)]"
+    >
+      <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3.5">
+        <h2 className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
           Annotations
         </h2>
+        <span className="font-mono text-[10px] text-[var(--text-tertiary)]">
+          {annotations.length}
+        </span>
       </div>
 
       {formMode && editingAnnotation ? (
@@ -60,6 +66,6 @@ export function Sidebar({
           selectedId={selectedAnnotation?.id ?? null}
         />
       )}
-    </div>
+    </nav>
   );
 }

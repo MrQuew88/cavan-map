@@ -17,7 +17,7 @@ import { useAnnotations } from '@/hooks/useAnnotations';
 import { useMapDraw } from '@/hooks/useMapDraw';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
 import { getNextLabel } from '@/lib/labels';
-import { DEFAULT_VISIBILITY } from '@/lib/constants';
+import { DEFAULT_VISIBILITY, ANNOTATION_LABELS } from '@/lib/constants';
 import type {
   Annotation,
   Tool,
@@ -174,15 +174,19 @@ export default function HomePage() {
       const root = document.createElement('div');
       container.appendChild(root);
 
+      const typeLabel = ANNOTATION_LABELS[ann.type];
       root.innerHTML = `
-        <div style="min-width:180px;padding:12px;font-family:'DM Sans',system-ui,sans-serif">
-          <div style="font-weight:600;color:white;margin-bottom:4px;font-size:14px">${ann.label}</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:10px;line-height:1.4">${ann.notes || 'Aucune note'}</div>
-          <button id="popup-edit" style="background:var(--accent,#3b82f6);color:white;border:none;border-radius:10px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;width:100%;font-family:inherit;transition:background 0.15s ease-out">Modifier</button>
+        <div style="min-width:190px;padding:14px;font-family:'Lexend',system-ui,sans-serif">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+            <span style="font-size:11px;color:var(--text-tertiary,#555570);font-weight:500;letter-spacing:0.03em">${typeLabel}</span>
+            <span style="margin-left:auto;font-family:'Azeret Mono',monospace;font-size:14px;font-weight:600;color:white">${ann.label}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary,#8888a0);margin-bottom:12px;line-height:1.5">${ann.notes || 'Aucune note'}</div>
+          <button id="popup-edit" style="background:var(--accent,#22d3ee);color:#06060c;border:none;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;width:100%;font-family:'Lexend',sans-serif;letter-spacing:0.01em;transition:opacity 0.15s cubic-bezier(0.16,1,0.3,1)">Modifier</button>
         </div>
       `;
 
-      const newPopup = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '250px' })
+      const newPopup = new mapboxgl.Popup({ closeOnClick: true, maxWidth: '260px' })
         .setLngLat(lngLat)
         .setDOMContent(container)
         .addTo(map);
@@ -253,10 +257,10 @@ export default function HomePage() {
 
   if (status === 'loading') {
     return (
-      <div className="flex h-dvh items-center justify-center bg-[#0a0a0a]">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/10 border-t-white/70" />
-          <span className="text-xs text-white/30">Chargement…</span>
+      <div className="flex h-dvh items-center justify-center bg-[var(--bg)]" role="status">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--accent)]/20 border-t-[var(--accent)]" />
+          <span className="text-xs font-light tracking-wide text-[var(--text-tertiary)]">Chargement…</span>
         </div>
       </div>
     );
@@ -282,15 +286,14 @@ export default function HomePage() {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
-      {/* Header */}
-      <header className="flex h-11 items-center justify-between border-b border-white/6 bg-[var(--panel)]/95 px-4 backdrop-blur-md">
-        <h1 className="text-[13px] font-semibold tracking-tight text-white/90">
-          Cavan Map
+      <header className="flex h-11 shrink-0 items-center justify-between border-b border-[var(--border)] bg-[var(--panel)]/95 px-4 backdrop-blur-lg">
+        <h1 className="text-[13px] font-semibold tracking-tight text-[var(--text-primary)]">
+          Cavan<span className="ml-1 font-light text-[var(--text-tertiary)]">Map</span>
         </h1>
         <LoginButton />
       </header>
 
-      <div className="relative flex flex-1 overflow-hidden">
+      <div id="main-content" className="relative flex flex-1 overflow-hidden">
         {isDesktop && <Sidebar {...sharedProps} />}
 
         <div className="relative flex-1">

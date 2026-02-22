@@ -61,57 +61,67 @@ export function AnnotationList({
   };
 
   return (
-    <div className="hide-scrollbar flex-1 overflow-y-auto">
+    <div className="hide-scrollbar flex-1 overflow-y-auto" role="list" aria-label="Liste des annotations">
       {TYPES.map((type) => {
         const items = annotations.filter((a) => a.type === type);
         const isCollapsed = collapsed[type];
+        const isVisible = visibility[type];
 
         return (
-          <div key={type} className="border-b border-white/4">
-            <button
-              onClick={() => toggleCollapsed(type)}
-              className="flex w-full items-center gap-2.5 px-4 py-2.5 text-left transition-colors duration-150 hover:bg-white/4"
-            >
-              <div
-                className="h-2 w-2 rounded-full ring-2 ring-white/10"
-                style={{ backgroundColor: ANNOTATION_COLORS[type] }}
-              />
-              <span className="flex-1 text-[13px] font-medium text-white/70">
-                {ANNOTATION_LABELS[type]}
-              </span>
-              <span className="min-w-[20px] text-center font-mono text-[11px] text-white/30">
-                {items.length}
-              </span>
+          <div key={type} className="border-b border-[var(--border)]" role="listitem">
+            <div className="flex w-full items-center gap-2 px-4 py-2.5">
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleVisibility(type);
-                }}
-                className="ml-0.5 rounded-md p-1 text-white/30 transition-colors duration-150 hover:bg-white/8 hover:text-white/60"
-                title={visibility[type] ? 'Masquer' : 'Afficher'}
+                onClick={() => toggleCollapsed(type)}
+                aria-expanded={!isCollapsed}
+                aria-label={`${ANNOTATION_LABELS[type]} — ${isCollapsed ? 'développer' : 'réduire'}`}
+                className="flex flex-1 items-center gap-2.5 text-left transition-colors duration-150 hover:opacity-80"
               >
-                {visibility[type] ? (
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <div
+                  className="h-2 w-2 rounded-full"
+                  style={{
+                    backgroundColor: ANNOTATION_COLORS[type],
+                    opacity: isVisible ? 1 : 0.3,
+                    boxShadow: isVisible ? `0 0 6px ${ANNOTATION_COLORS[type]}40` : 'none',
+                  }}
+                />
+                <span className={`flex-1 text-[13px] font-medium transition-colors duration-150 ${isVisible ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)]'}`}>
+                  {ANNOTATION_LABELS[type]}
+                </span>
+                <span className="min-w-[18px] text-center font-mono text-[10px] text-[var(--text-tertiary)]">
+                  {items.length}
+                </span>
+                <svg
+                  className={`h-3 w-3 text-[var(--text-tertiary)] transition-transform duration-200`}
+                  style={{ transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                >
+                  <path d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              <button
+                onClick={() => toggleVisibility(type)}
+                className="rounded-md p-1.5 text-[var(--text-tertiary)] transition-colors duration-150 hover:bg-white/6 hover:text-[var(--text-secondary)]"
+                aria-label={isVisible ? `Masquer ${ANNOTATION_LABELS[type]}` : `Afficher ${ANNOTATION_LABELS[type]}`}
+                aria-pressed={isVisible}
+              >
+                {isVisible ? (
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                     <circle cx="12" cy="12" r="3" />
                   </svg>
                 ) : (
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                     <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" />
                     <line x1="1" y1="1" x2="23" y2="23" />
                   </svg>
                 )}
               </button>
-              <svg
-                className={`h-3.5 w-3.5 text-white/20 transition-transform duration-200 ease-out ${isCollapsed ? '' : 'rotate-180'}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+            </div>
 
             {!isCollapsed && items.length > 0 && (
               <div className="pb-1">
@@ -119,14 +129,18 @@ export function AnnotationList({
                   <button
                     key={ann.id}
                     onClick={() => onAnnotationSelect(ann)}
-                    className={`flex w-full items-center gap-2 px-6 py-1.5 text-left transition-colors duration-150 hover:bg-white/4 ${
-                      selectedId === ann.id ? 'bg-white/8' : ''
+                    aria-label={`${ANNOTATION_LABELS[ann.type]} ${ann.label}`}
+                    className={`flex w-full items-center gap-2.5 px-4 py-1.5 pl-9 text-left transition-all duration-150 hover:bg-[var(--accent-muted)] ${
+                      selectedId === ann.id
+                        ? 'bg-[var(--accent-muted)] text-[var(--text-primary)]'
+                        : ''
                     }`}
+                    style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
                   >
-                    <span className="font-mono text-[11px] font-semibold text-white/60">
+                    <span className="font-mono text-[11px] font-semibold text-[var(--accent)]">
                       {ann.label}
                     </span>
-                    <span className="flex-1 truncate text-[11px] text-white/35">
+                    <span className="flex-1 truncate text-[11px] text-[var(--text-tertiary)]">
                       {getAnnotationSummary(ann)}
                     </span>
                   </button>

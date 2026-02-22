@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+
 interface DeleteConfirmDialogProps {
   open: boolean;
   label: string;
@@ -13,31 +15,83 @@ export function DeleteConfirmDialog({
   onConfirm,
   onCancel,
 }: DeleteConfirmDialogProps) {
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  // Focus trap + auto-focus cancel on open
+  useEffect(() => {
+    if (!open) return;
+
+    cancelRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel();
+        return;
+      }
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+
+      const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, onCancel]);
+
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-desc"
+    >
+      {/* Overlay */}
       <div
-        className="w-full max-w-sm rounded-2xl border border-white/8 bg-[var(--panel-raised)] p-6 shadow-2xl"
-        style={{ animation: 'fadeScale 0.2s ease-out' }}
+        className="absolute inset-0 bg-black/65 backdrop-blur-sm"
+        onClick={onCancel}
+        style={{ animation: 'dialog-overlay 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
+      />
+
+      {/* Panel */}
+      <div
+        ref={dialogRef}
+        className="relative w-full max-w-sm rounded-2xl bg-[var(--panel-raised)] p-6 shadow-2xl ring-1 ring-[var(--border)]"
+        style={{ animation: 'dialog-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
-        <h3 className="mb-2 text-base font-semibold text-white">
+        <h3 id="delete-dialog-title" className="mb-2 text-[15px] font-semibold text-[var(--text-primary)]">
           Supprimer l'annotation
         </h3>
-        <p className="mb-6 text-sm leading-relaxed text-white/50">
-          Voulez-vous vraiment supprimer <strong className="text-white">{label}</strong> ?
+        <p id="delete-dialog-desc" className="mb-6 text-[13px] leading-relaxed text-[var(--text-secondary)]">
+          Voulez-vous vraiment supprimer <strong className="font-semibold text-[var(--text-primary)]">{label}</strong> ?
           Cette action est irréversible.
         </p>
         <div className="flex justify-end gap-2">
           <button
+            ref={cancelRef}
             onClick={onCancel}
-            className="btn-press rounded-lg bg-white/8 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-150 hover:bg-white/14"
+            className="btn-press rounded-xl bg-white/6 px-4 py-2.5 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-150 hover:bg-white/10"
           >
             Annuler
           </button>
           <button
             onClick={onConfirm}
-            className="btn-press rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-red-500"
+            className="btn-press rounded-xl px-4 py-2.5 text-[13px] font-semibold text-white transition-colors duration-150"
+            style={{ backgroundColor: 'var(--destructive)' }}
           >
             Supprimer
           </button>

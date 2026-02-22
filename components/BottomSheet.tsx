@@ -34,11 +34,7 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const [state, setState] = useState<SheetState>('collapsed');
   const startY = useRef(0);
-  const currentState = useRef<SheetState>(state);
-
-  useEffect(() => {
-    currentState.current = state;
-  }, [state]);
+  const startTime = useRef(0);
 
   useEffect(() => {
     if (formMode) setState('half');
@@ -46,11 +42,17 @@ export function BottomSheet({
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     startY.current = e.touches[0].clientY;
+    startTime.current = Date.now();
   }, []);
 
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     const deltaY = startY.current - e.changedTouches[0].clientY;
-    const threshold = 50;
+    const elapsed = Date.now() - startTime.current;
+    const velocity = Math.abs(deltaY) / elapsed; // px/ms
+
+    // Momentum-based dismiss: use velocity threshold (Emil Kowalski: 0.11 px/ms)
+    const useVelocity = velocity > 0.11;
+    const threshold = useVelocity ? 20 : 50;
 
     if (deltaY > threshold) {
       setState((s) => (s === 'collapsed' ? 'half' : s === 'half' ? 'full' : 'full'));
@@ -61,28 +63,33 @@ export function BottomSheet({
 
   const heightClass = {
     collapsed: 'h-12',
-    half: 'h-[50vh]',
-    full: 'h-[85vh]',
+    half: 'h-[50dvh]',
+    full: 'h-[85dvh]',
   }[state];
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-40 rounded-t-2xl border-t border-white/8 bg-[var(--panel)] shadow-2xl shadow-black/40 transition-[height] duration-300 ease-out ${heightClass}`}
+      role="region"
+      aria-label="Panneau d'annotations"
+      className={`fixed inset-x-0 bottom-0 z-40 rounded-t-2xl bg-[var(--panel)] shadow-2xl shadow-black/50 ring-1 ring-[var(--border)] ${heightClass}`}
+      style={{
+        transition: 'height 500ms cubic-bezier(0.32, 0.72, 0, 1)',
+        willChange: 'height',
+      }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Handle */}
       <button
-        onClick={() =>
-          setState((s) => (s === 'collapsed' ? 'half' : 'collapsed'))
-        }
-        className="flex w-full items-center justify-center py-2"
+        onClick={() => setState((s) => (s === 'collapsed' ? 'half' : 'collapsed'))}
+        className="flex w-full items-center justify-center py-2.5"
+        aria-label={state === 'collapsed' ? 'Ouvrir le panneau' : 'Fermer le panneau'}
+        aria-expanded={state !== 'collapsed'}
       >
-        <div className="h-1 w-10 rounded-full bg-white/20" />
+        <div className="h-1 w-9 rounded-full bg-[var(--text-tertiary)]/60" />
       </button>
 
       {state !== 'collapsed' && (
-        <div className="flex h-[calc(100%-2rem)] flex-col overflow-hidden">
+        <div className="flex h-[calc(100%-2.5rem)] flex-col overflow-hidden">
           {formMode && editingAnnotation ? (
             <div className="flex-1 overflow-y-auto">
               <AnnotationForm

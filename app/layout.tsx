@@ -24,11 +24,14 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=JetBrains+Mono:wght@400;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&family=Lexend:wght@300;400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#0a0a0a] font-sans text-white antialiased">
+      <body className="bg-[var(--bg)] font-sans text-[var(--text-primary)] antialiased">
+        <a href="#main-content" className="skip-link">
+          Aller au contenu principal
+        </a>
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
