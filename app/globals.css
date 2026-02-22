@@ -64,7 +64,9 @@ body {
 }
 
 .mapboxgl-popup-content {
-  background: var(--panel-raised) !important;
+  background: rgba(17, 17, 36, 0.8) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
   color: var(--text-primary) !important;
   border-radius: 14px !important;
   padding: 0 !important;

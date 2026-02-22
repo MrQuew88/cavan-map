@@ -43,13 +43,13 @@ function createDefaultAnnotation(
 
   switch (type) {
     case 'target_zone':
-      return { ...base, type, position: geometry.position!, priority: 'medium', season: 'all', species: '', technique: '' };
+      return { ...base, type, position: geometry.position!, title: '', depth: 0 };
     case 'depth_point':
-      return { ...base, type, position: geometry.position!, depth: 0, unit: 'm' };
+      return { ...base, type, position: geometry.position!, depth: 0 };
     case 'isobath':
-      return { ...base, type, points: geometry.points!, depth: 0, unit: 'm' };
+      return { ...base, type, points: geometry.points!, depth: 0 };
     case 'dropoff':
-      return { ...base, type, points: geometry.points!, shallowDepth: 0, deepDepth: 0, unit: 'm' };
+      return { ...base, type, points: geometry.points!, shallowDepth: 0, deepDepth: 0 };
     case 'spawn_zone':
       return { ...base, type, points: geometry.points!, species: '', season: 'spring', confidence: 'speculative' };
     case 'accumulation_zone':
@@ -286,7 +286,7 @@ export default function HomePage() {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
-      <header className="flex h-11 shrink-0 items-center justify-between border-b border-[var(--border)] bg-[var(--panel)]/95 px-4 backdrop-blur-lg">
+      <header className="flex h-11 shrink-0 items-center justify-between border-b border-[var(--border)] px-4 backdrop-blur-xl" style={{ background: 'rgba(10, 10, 22, 0.7)' }}>
         <h1 className="text-[13px] font-semibold tracking-tight text-[var(--text-primary)]">
           Cavan<span className="ml-1 font-light text-[var(--text-tertiary)]">Map</span>
         </h1>

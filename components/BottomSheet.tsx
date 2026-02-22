@@ -71,10 +71,11 @@ export function BottomSheet({
     <div
       role="region"
       aria-label="Panneau d'annotations"
-      className={`fixed inset-x-0 bottom-0 z-40 rounded-t-2xl bg-[var(--panel)] shadow-2xl shadow-black/50 ring-1 ring-[var(--border)] ${heightClass}`}
+      className={`fixed inset-x-0 bottom-0 z-40 rounded-t-2xl shadow-2xl shadow-black/50 ring-1 ring-[var(--border)] backdrop-blur-xl ${heightClass}`}
       style={{
         transition: 'height 500ms cubic-bezier(0.32, 0.72, 0, 1)',
         willChange: 'height',
+        background: 'rgba(10, 10, 22, 0.75)',
       }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}

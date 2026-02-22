@@ -5,12 +5,10 @@ import type { Annotation, AnnotationType } from '@/lib/types';
 import {
   SEASONS,
   CONFIDENCE_LEVELS,
-  PRIORITIES,
   ANNOTATION_LABELS,
   ANNOTATION_COLORS,
   SEASON_LABELS,
   CONFIDENCE_LABELS,
-  PRIORITY_LABELS,
 } from '@/lib/constants';
 
 interface AnnotationFormProps {
@@ -157,6 +155,36 @@ function SelectField({
   );
 }
 
+function DepthInput({
+  id,
+  label,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: number;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <Field label={label} htmlFor={id}>
+      <div className="relative">
+        <input
+          id={id}
+          type="number"
+          step="0.1"
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+          className="input-field w-full pr-10"
+        />
+        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[12px] font-medium text-[var(--text-tertiary)]">
+          m
+        </span>
+      </div>
+    </Field>
+  );
+}
+
 function renderTypeFields(
   data: Annotation,
   update: (field: string, value: unknown) => void,
@@ -166,55 +194,25 @@ function renderTypeFields(
     case 'target_zone':
       return (
         <>
-          <SelectField label="Priorité" id={`priority-${annId}`} value={data.priority} options={PRIORITIES} labelMap={PRIORITY_LABELS} onChange={(v) => update('priority', v)} />
-          <SelectField label="Saison" id={`season-${annId}`} value={data.season} options={SEASONS} labelMap={SEASON_LABELS} onChange={(v) => update('season', v)} />
-          <Field label="Espèce" htmlFor={`species-${annId}`}>
-            <input id={`species-${annId}`} type="text" value={data.species} onChange={(e) => update('species', e.target.value)} className="input-field" placeholder="ex. Brochet, Perche" />
+          <Field label="Titre" htmlFor={`title-${annId}`}>
+            <input id={`title-${annId}`} type="text" value={data.title} onChange={(e) => update('title', e.target.value)} className="input-field" placeholder="ex. Pointe nord, Baie est" />
           </Field>
-          <Field label="Technique" htmlFor={`technique-${annId}`}>
-            <input id={`technique-${annId}`} type="text" value={data.technique} onChange={(e) => update('technique', e.target.value)} className="input-field" placeholder="ex. Leurre, Mouche" />
-          </Field>
+          <DepthInput id={`depth-${annId}`} label="Profondeur" value={data.depth} onChange={(v) => update('depth', v)} />
         </>
       );
     case 'depth_point':
       return (
-        <Field label="Profondeur" htmlFor={`depth-${annId}`}>
-          <div className="flex gap-2">
-            <input id={`depth-${annId}`} type="number" step="0.1" value={data.depth} onChange={(e) => update('depth', parseFloat(e.target.value) || 0)} className="input-field flex-1" />
-            <select aria-label="Unité" value={data.unit} onChange={(e) => update('unit', e.target.value)} className="input-field w-16">
-              <option value="m">m</option>
-              <option value="ft">ft</option>
-            </select>
-          </div>
-        </Field>
+        <DepthInput id={`depth-${annId}`} label="Profondeur" value={data.depth} onChange={(v) => update('depth', v)} />
       );
     case 'isobath':
       return (
-        <Field label="Profondeur" htmlFor={`depth-${annId}`}>
-          <div className="flex gap-2">
-            <input id={`depth-${annId}`} type="number" step="0.1" value={data.depth} onChange={(e) => update('depth', parseFloat(e.target.value) || 0)} className="input-field flex-1" />
-            <select aria-label="Unité" value={data.unit} onChange={(e) => update('unit', e.target.value)} className="input-field w-16">
-              <option value="m">m</option>
-              <option value="ft">ft</option>
-            </select>
-          </div>
-        </Field>
+        <DepthInput id={`depth-${annId}`} label="Profondeur" value={data.depth} onChange={(v) => update('depth', v)} />
       );
     case 'dropoff':
       return (
         <>
-          <Field label="Profondeur faible" htmlFor={`shallow-${annId}`}>
-            <div className="flex gap-2">
-              <input id={`shallow-${annId}`} type="number" step="0.1" value={data.shallowDepth} onChange={(e) => update('shallowDepth', parseFloat(e.target.value) || 0)} className="input-field flex-1" />
-              <select aria-label="Unité" value={data.unit} onChange={(e) => update('unit', e.target.value)} className="input-field w-16">
-                <option value="m">m</option>
-                <option value="ft">ft</option>
-              </select>
-            </div>
-          </Field>
-          <Field label="Profondeur forte" htmlFor={`deep-${annId}`}>
-            <input id={`deep-${annId}`} type="number" step="0.1" value={data.deepDepth} onChange={(e) => update('deepDepth', parseFloat(e.target.value) || 0)} className="input-field flex-1" />
-          </Field>
+          <DepthInput id={`shallow-${annId}`} label="Profondeur faible" value={data.shallowDepth} onChange={(v) => update('shallowDepth', v)} />
+          <DepthInput id={`deep-${annId}`} label="Profondeur forte" value={data.deepDepth} onChange={(v) => update('deepDepth', v)} />
         </>
       );
     case 'spawn_zone':

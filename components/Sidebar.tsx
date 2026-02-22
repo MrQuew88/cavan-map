@@ -32,7 +32,8 @@ export function Sidebar({
   return (
     <nav
       aria-label="Panneau d'annotations"
-      className="flex h-full w-80 flex-col border-r border-[var(--border)] bg-[var(--panel)]"
+      className="flex h-full w-80 flex-col border-r border-[var(--border)] backdrop-blur-xl"
+      style={{ background: 'rgba(10, 10, 22, 0.75)' }}
     >
       <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3.5">
         <h2 className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">

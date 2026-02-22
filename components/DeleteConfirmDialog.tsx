@@ -70,8 +70,8 @@ export function DeleteConfirmDialog({
       {/* Panel */}
       <div
         ref={dialogRef}
-        className="relative w-full max-w-sm rounded-2xl bg-[var(--panel-raised)] p-6 shadow-2xl ring-1 ring-[var(--border)]"
-        style={{ animation: 'dialog-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        className="relative w-full max-w-sm rounded-2xl p-6 shadow-2xl ring-1 ring-[var(--border)] backdrop-blur-xl"
+        style={{ background: 'rgba(17, 17, 36, 0.85)', animation: 'dialog-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
         <h3 id="delete-dialog-title" className="mb-2 text-[15px] font-semibold text-[var(--text-primary)]">
           Supprimer l'annotation

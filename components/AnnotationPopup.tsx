@@ -5,7 +5,6 @@ import {
   ANNOTATION_LABELS,
   ANNOTATION_COLORS,
   SEASON_LABELS,
-  PRIORITY_LABELS,
   CONFIDENCE_LABELS,
 } from '@/lib/constants';
 
@@ -66,20 +65,18 @@ function renderDetails(annotation: Annotation) {
     case 'target_zone':
       return (
         <div className="flex flex-wrap gap-1.5">
-          <Tag>{PRIORITY_LABELS[annotation.priority]}</Tag>
-          <Tag>{SEASON_LABELS[annotation.season]}</Tag>
-          {annotation.species && <Tag>{annotation.species}</Tag>}
-          {annotation.technique && <Tag>{annotation.technique}</Tag>}
+          {annotation.title && <Tag>{annotation.title}</Tag>}
+          {annotation.depth > 0 && <Tag>{annotation.depth}m</Tag>}
         </div>
       );
     case 'depth_point':
-      return <div className="font-mono text-sm font-medium text-blue-300">{annotation.depth}{annotation.unit}</div>;
+      return <div className="font-mono text-sm font-medium text-blue-300">{annotation.depth}m</div>;
     case 'isobath':
-      return <div className="font-mono text-sm font-medium text-teal-300">{annotation.depth}{annotation.unit}</div>;
+      return <div className="font-mono text-sm font-medium text-teal-300">{annotation.depth}m</div>;
     case 'dropoff':
       return (
         <div className="font-mono text-sm font-medium text-red-300">
-          {annotation.shallowDepth}{annotation.unit} → {annotation.deepDepth}{annotation.unit}
+          {annotation.shallowDepth}m → {annotation.deepDepth}m
         </div>
       );
     case 'spawn_zone':

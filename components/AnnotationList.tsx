@@ -7,7 +7,6 @@ import {
   ANNOTATION_COLORS,
   DEFAULT_VISIBILITY,
   SEASON_LABELS,
-  PRIORITY_LABELS,
   CONFIDENCE_LABELS,
 } from '@/lib/constants';
 
@@ -157,13 +156,13 @@ export function AnnotationList({
 function getAnnotationSummary(ann: Annotation): string {
   switch (ann.type) {
     case 'target_zone':
-      return [ann.species, ann.technique, PRIORITY_LABELS[ann.priority]].filter(Boolean).join(' · ');
+      return [ann.title, ann.depth ? `${ann.depth}m` : ''].filter(Boolean).join(' · ');
     case 'depth_point':
-      return `${ann.depth}${ann.unit}`;
+      return `${ann.depth}m`;
     case 'isobath':
-      return `${ann.depth}${ann.unit}`;
+      return `${ann.depth}m`;
     case 'dropoff':
-      return `${ann.shallowDepth}→${ann.deepDepth}${ann.unit}`;
+      return `${ann.shallowDepth}→${ann.deepDepth}m`;
     case 'spawn_zone':
       return [ann.species, SEASON_LABELS[ann.season]].filter(Boolean).join(' · ');
     case 'accumulation_zone':

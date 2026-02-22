@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import type { Annotation, VisibilityState } from '@/lib/types';
-import { ANNOTATION_COLORS, PRIORITY_COLORS } from '@/lib/constants';
+import { ANNOTATION_COLORS } from '@/lib/constants';
 
 interface AnnotationRendererProps {
   map: mapboxgl.Map | null;
@@ -42,7 +42,7 @@ export function AnnotationRenderer({
         inner.style.cssText = `
           width: 32px; height: 32px; border-radius: 50%;
           background: ${ANNOTATION_COLORS.target_zone};
-          border: 2px solid ${PRIORITY_COLORS[ann.priority]};
+          border: 2px solid rgba(255,255,255,0.25);
           display: flex; align-items: center; justify-content: center;
           font-size: 11px; font-weight: 600; color: white;
           box-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2);
@@ -67,17 +67,17 @@ export function AnnotationRenderer({
       if (ann.type === 'depth_point') {
         const el = document.createElement('div');
         el.setAttribute('role', 'button');
-        el.setAttribute('aria-label', `Point de Profondeur ${ann.depth}${ann.unit}`);
+        el.setAttribute('aria-label', `Point de Profondeur ${ann.depth}m`);
         el.setAttribute('tabindex', '0');
         el.style.cssText = `cursor: pointer;`;
         const inner = document.createElement('div');
         inner.style.cssText = `
           background: ${ANNOTATION_COLORS.depth_point}; border-radius: 50%;
-          width: 22px; height: 22px; display: flex; align-items: center;
-          justify-content: center; font-size: 9px; font-weight: 600;
-          color: white; border: 1.5px solid rgba(0,0,0,0.3);
+          width: 32px; height: 32px; display: flex; align-items: center;
+          justify-content: center; font-size: 14px; font-weight: 700;
+          color: white; border: 2px solid rgba(255,255,255,0.25);
           font-family: ${MARKER_FONT};
-          box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+          box-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2);
           transition: transform 0.15s ${EASE_OUT};
           will-change: transform;
         `;
@@ -152,7 +152,7 @@ export function AnnotationRenderer({
           id: ann.id,
           type: ann.type,
           color: ANNOTATION_COLORS[ann.type],
-          label: ann.type === 'isobath' ? `${ann.depth}${ann.unit}` : `${ann.shallowDepth}→${ann.deepDepth}${ann.unit}`,
+          label: ann.type === 'isobath' ? `${ann.depth}m` : `${ann.shallowDepth}→${ann.deepDepth}m`,
         },
         geometry: {
           type: 'LineString',

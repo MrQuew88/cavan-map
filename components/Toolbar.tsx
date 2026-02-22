@@ -105,7 +105,8 @@ export function Toolbar({ activeTool, onToolChange }: ToolbarProps) {
       <div
         role="toolbar"
         aria-label="Outils d'annotation"
-        className="flex items-center gap-px rounded-2xl bg-[var(--panel)]/90 p-1 shadow-xl shadow-black/40 ring-1 ring-[var(--border)] backdrop-blur-xl"
+        className="flex items-center gap-px rounded-2xl p-1 shadow-xl shadow-black/40 ring-1 ring-[var(--border)] backdrop-blur-xl"
+        style={{ background: 'rgba(10, 10, 22, 0.7)' }}
       >
         {TOOLS.map((tool, i) => {
           const isActive = activeTool === tool;
@@ -138,7 +139,8 @@ export function Toolbar({ activeTool, onToolChange }: ToolbarProps) {
         <div
           role="status"
           aria-live="polite"
-          className="rounded-xl bg-[var(--panel)]/95 px-4 py-2 text-xs font-medium text-[var(--text-secondary)] shadow-lg shadow-black/30 ring-1 ring-[var(--border)] backdrop-blur-xl"
+          className="rounded-xl px-4 py-2 text-xs font-medium text-[var(--text-secondary)] shadow-lg shadow-black/30 ring-1 ring-[var(--border)] backdrop-blur-xl"
+          style={{ background: 'rgba(10, 10, 22, 0.75)' }}
         >
           {instruction}
           <span className="mx-1.5 text-[var(--text-tertiary)]">·</span>

@@ -32,24 +32,20 @@ export interface BaseAnnotation {
 export interface TargetZone extends BaseAnnotation {
   type: 'target_zone';
   position: GeoPoint;
-  priority: Priority;
-  season: Season;
-  species: string;
-  technique: string;
+  title: string;
+  depth: number;
 }
 
 export interface DepthPoint extends BaseAnnotation {
   type: 'depth_point';
   position: GeoPoint;
   depth: number;
-  unit: 'm' | 'ft';
 }
 
 export interface Isobath extends BaseAnnotation {
   type: 'isobath';
   points: GeoPoint[];
   depth: number;
-  unit: 'm' | 'ft';
 }
 
 export interface DropoffLine extends BaseAnnotation {
@@ -57,7 +53,6 @@ export interface DropoffLine extends BaseAnnotation {
   points: GeoPoint[];
   shallowDepth: number;
   deepDepth: number;
-  unit: 'm' | 'ft';
 }
 
 export interface SpawnZone extends BaseAnnotation {
