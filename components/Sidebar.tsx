@@ -17,7 +17,6 @@ interface SidebarProps {
   onSave: (annotation: Annotation) => void;
   onDelete: (id: string) => void;
   onCancelEdit: () => void;
-  onCreateSpot: () => void;
   onDeleteSpot: (id: string) => void;
   onUpdateSpot: (id: string, updates: Partial<Spot>) => void;
   formMode: 'create' | 'edit' | null;
@@ -35,7 +34,6 @@ export function Sidebar({
   onSave,
   onDelete,
   onCancelEdit,
-  onCreateSpot,
   onDeleteSpot,
   onUpdateSpot,
   formMode,
@@ -78,7 +76,6 @@ export function Sidebar({
           visibility={visibility}
           onVisibilityChange={onVisibilityChange}
           onAnnotationSelect={onAnnotationSelect}
-          onCreateSpot={onCreateSpot}
           onDeleteSpot={onDeleteSpot}
           onUpdateSpot={onUpdateSpot}
           selectedId={selectedAnnotation?.id ?? null}

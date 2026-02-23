@@ -71,17 +71,17 @@ export interface DropoffLine extends BaseAnnotation {
 export interface SpawnZone extends BaseAnnotation {
   type: 'spawn_zone';
   points: GeoPoint[];
-  species: string;
-  season: Season;
-  confidence: Confidence;
+  title: string;
+  depth: number;
+  substrate: string;
 }
 
 export interface AccumulationZone extends BaseAnnotation {
   type: 'accumulation_zone';
   points: GeoPoint[];
-  foodType: string;
-  season: Season;
-  confidence: Confidence;
+  title: string;
+  description: string;
+  activationConditions: string;
 }
 
 export interface NoteAnnotation extends BaseAnnotation {

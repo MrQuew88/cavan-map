@@ -1,14 +1,10 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { Annotation, AnnotationType, Spot } from '@/lib/types';
+import type { Annotation, Spot } from '@/lib/types';
 import {
-  SEASONS,
-  CONFIDENCE_LEVELS,
   ANNOTATION_LABELS,
   ANNOTATION_COLORS,
-  SEASON_LABELS,
-  CONFIDENCE_LABELS,
 } from '@/lib/constants';
 
 interface AnnotationFormProps {
@@ -145,39 +141,6 @@ function Field({ label, htmlFor, children }: { label: string; htmlFor?: string; 
   );
 }
 
-function SelectField({
-  label,
-  id,
-  value,
-  options,
-  labelMap,
-  onChange,
-}: {
-  label: string;
-  id: string;
-  value: string;
-  options: readonly string[];
-  labelMap: Record<string, string>;
-  onChange: (v: string) => void;
-}) {
-  return (
-    <Field label={label} htmlFor={id}>
-      <select
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="input-field"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {labelMap[o] ?? o}
-          </option>
-        ))}
-      </select>
-    </Field>
-  );
-}
-
 function DepthInput({
   id,
   label,
@@ -241,21 +204,27 @@ function renderTypeFields(
     case 'spawn_zone':
       return (
         <>
-          <Field label="Esp\u00e8ce" htmlFor={`species-${annId}`}>
-            <input id={`species-${annId}`} type="text" value={data.species} onChange={(e) => update('species', e.target.value)} className="input-field" />
+          <Field label="Titre" htmlFor={`title-${annId}`}>
+            <input id={`title-${annId}`} type="text" value={data.title} onChange={(e) => update('title', e.target.value)} className="input-field" placeholder="ex. Fray\u00e8re nord" />
           </Field>
-          <SelectField label="Saison" id={`season-${annId}`} value={data.season} options={SEASONS} labelMap={SEASON_LABELS} onChange={(v) => update('season', v)} />
-          <SelectField label="Confiance" id={`confidence-${annId}`} value={data.confidence} options={CONFIDENCE_LEVELS} labelMap={CONFIDENCE_LABELS} onChange={(v) => update('confidence', v)} />
+          <DepthInput id={`depth-${annId}`} label="Profondeur" value={data.depth} onChange={(v) => update('depth', v)} />
+          <Field label="Substrat" htmlFor={`substrate-${annId}`}>
+            <input id={`substrate-${annId}`} type="text" value={data.substrate} onChange={(e) => update('substrate', e.target.value)} className="input-field" placeholder="ex. Gravier, Sable" />
+          </Field>
         </>
       );
     case 'accumulation_zone':
       return (
         <>
-          <Field label="Type de nourriture" htmlFor={`foodtype-${annId}`}>
-            <input id={`foodtype-${annId}`} type="text" value={data.foodType} onChange={(e) => update('foodType', e.target.value)} className="input-field" placeholder="ex. Insectes, Algues" />
+          <Field label="Titre" htmlFor={`title-${annId}`}>
+            <input id={`title-${annId}`} type="text" value={data.title} onChange={(e) => update('title', e.target.value)} className="input-field" placeholder="ex. Zone d'accumulation est" />
           </Field>
-          <SelectField label="Saison" id={`season-${annId}`} value={data.season} options={SEASONS} labelMap={SEASON_LABELS} onChange={(v) => update('season', v)} />
-          <SelectField label="Confiance" id={`confidence-${annId}`} value={data.confidence} options={CONFIDENCE_LEVELS} labelMap={CONFIDENCE_LABELS} onChange={(v) => update('confidence', v)} />
+          <Field label="Description" htmlFor={`description-${annId}`}>
+            <textarea id={`description-${annId}`} value={data.description} onChange={(e) => update('description', e.target.value)} className="input-field min-h-[64px] resize-y" placeholder="D\u00e9crire la zone\u2026" />
+          </Field>
+          <Field label="Conditions d'activation" htmlFor={`activation-${annId}`}>
+            <textarea id={`activation-${annId}`} value={data.activationConditions} onChange={(e) => update('activationConditions', e.target.value)} className="input-field min-h-[64px] resize-y" placeholder="ex. Vent d'est, mont\u00e9e des eaux" />
+          </Field>
         </>
       );
     case 'note':

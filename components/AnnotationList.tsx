@@ -6,7 +6,6 @@ import {
   ANNOTATION_LABELS,
   ANNOTATION_COLORS,
   DEFAULT_VISIBILITY,
-  SEASON_LABELS,
 } from '@/lib/constants';
 import mapboxgl from 'mapbox-gl';
 
@@ -17,7 +16,6 @@ interface AnnotationListProps {
   visibility: VisibilityState;
   onVisibilityChange: (visibility: VisibilityState) => void;
   onAnnotationSelect: (annotation: Annotation) => void;
-  onCreateSpot: () => void;
   onDeleteSpot: (id: string) => void;
   onUpdateSpot: (id: string, updates: Partial<Spot>) => void;
   selectedId: string | null;
@@ -40,7 +38,6 @@ export function AnnotationList({
   visibility,
   onVisibilityChange,
   onAnnotationSelect,
-  onCreateSpot,
   onDeleteSpot,
   onUpdateSpot,
   selectedId,
@@ -111,18 +108,6 @@ export function AnnotationList({
         <span className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
           Spots
         </span>
-        <button
-          onClick={onCreateSpot}
-          className="flex h-5 w-5 items-center justify-center rounded-md text-[var(--text-tertiary)] transition-colors duration-150 hover:text-[var(--accent)]"
-          style={{ backgroundColor: 'transparent' }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(212, 145, 92, 0.08)')}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-          aria-label="Cr\u00e9er un spot"
-        >
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
       </div>
 
       {/* Spots */}
@@ -465,9 +450,9 @@ function getAnnotationSummary(ann: Annotation): string {
     case 'dropoff':
       return `${ann.shallowDepth}\u2192${ann.deepDepth}m`;
     case 'spawn_zone':
-      return [ann.species, SEASON_LABELS[ann.season]].filter(Boolean).join(' \u00b7 ');
+      return [ann.title, ann.depth ? `${ann.depth}m` : '', ann.substrate].filter(Boolean).join(' \u00b7 ');
     case 'accumulation_zone':
-      return [ann.foodType, SEASON_LABELS[ann.season]].filter(Boolean).join(' \u00b7 ');
+      return [ann.title, ann.description].filter(Boolean).join(' \u00b7 ');
     case 'note':
       return ann.notes?.slice(0, 40) || '';
   }

@@ -4,8 +4,6 @@ import type { Annotation } from '@/lib/types';
 import {
   ANNOTATION_LABELS,
   ANNOTATION_COLORS,
-  SEASON_LABELS,
-  CONFIDENCE_LABELS,
 } from '@/lib/constants';
 
 interface AnnotationPopupProps {
@@ -82,17 +80,17 @@ function renderDetails(annotation: Annotation) {
     case 'spawn_zone':
       return (
         <div className="flex flex-wrap gap-1.5">
-          {annotation.species && <Tag>{annotation.species}</Tag>}
-          <Tag>{SEASON_LABELS[annotation.season]}</Tag>
-          <Tag>{CONFIDENCE_LABELS[annotation.confidence]}</Tag>
+          {annotation.title && <Tag>{annotation.title}</Tag>}
+          {annotation.depth > 0 && <Tag>{annotation.depth}m</Tag>}
+          {annotation.substrate && <Tag>{annotation.substrate}</Tag>}
         </div>
       );
     case 'accumulation_zone':
       return (
         <div className="flex flex-wrap gap-1.5">
-          {annotation.foodType && <Tag>{annotation.foodType}</Tag>}
-          <Tag>{SEASON_LABELS[annotation.season]}</Tag>
-          <Tag>{CONFIDENCE_LABELS[annotation.confidence]}</Tag>
+          {annotation.title && <Tag>{annotation.title}</Tag>}
+          {annotation.description && <Tag>{annotation.description}</Tag>}
+          {annotation.activationConditions && <Tag>{annotation.activationConditions}</Tag>}
         </div>
       );
     case 'note':

@@ -7,12 +7,19 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import { MAP_CONFIG } from '@/lib/constants';
 
+export interface GeocoderResult {
+  name: string;
+  center: [number, number];
+  bbox?: [number, number, number, number];
+}
+
 interface MapProps {
   onMapReady: (map: mapboxgl.Map) => void;
+  onGeocoderResult?: (result: GeocoderResult) => void;
   initialZoom?: number;
 }
 
-export function Map({ onMapReady, initialZoom }: MapProps) {
+export function Map({ onMapReady, onGeocoderResult, initialZoom }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
@@ -40,6 +47,16 @@ export function Map({ onMapReady, initialZoom }: MapProps) {
     });
     map.addControl(geocoder, 'top-left');
 
+    geocoder.on('result', (e: { result: { place_name?: string; text?: string; center: [number, number]; bbox?: [number, number, number, number] } }) => {
+      if (onGeocoderResult) {
+        onGeocoderResult({
+          name: e.result.text || e.result.place_name || 'Sans nom',
+          center: e.result.center,
+          bbox: e.result.bbox,
+        });
+      }
+    });
+
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.addControl(
       new mapboxgl.GeolocateControl({
@@ -59,7 +76,7 @@ export function Map({ onMapReady, initialZoom }: MapProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [onMapReady, initialZoom]);
+  }, [onMapReady, onGeocoderResult, initialZoom]);
 
   useEffect(() => {
     const cleanup = initMap();

@@ -7,11 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import mapboxgl from 'mapbox-gl';
 
 import { Map } from '@/components/Map';
+import type { GeocoderResult } from '@/components/Map';
 import { Toolbar } from '@/components/Toolbar';
 import { Sidebar } from '@/components/Sidebar';
 import { BottomSheet } from '@/components/BottomSheet';
 import { AnnotationRenderer } from '@/components/AnnotationRenderer';
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog';
+import { SaveSpotDialog } from '@/components/SaveSpotDialog';
 import { LoginButton } from '@/components/LoginButton';
 import { useAnnotations } from '@/hooks/useAnnotations';
 import { useSpots } from '@/hooks/useSpots';
@@ -53,9 +55,9 @@ function createDefaultAnnotation(
     case 'dropoff':
       return { ...base, type, points: geometry.points!, shallowDepth: 0, deepDepth: 0 };
     case 'spawn_zone':
-      return { ...base, type, points: geometry.points!, species: '', season: 'spring', confidence: 'speculative' };
+      return { ...base, type, points: geometry.points!, title: '', depth: 0, substrate: '' };
     case 'accumulation_zone':
-      return { ...base, type, points: geometry.points!, foodType: '', season: 'all', confidence: 'speculative' };
+      return { ...base, type, points: geometry.points!, title: '', description: '', activationConditions: '' };
     case 'note':
       return { ...base, type, position: geometry.position! };
   }
@@ -91,6 +93,7 @@ export default function HomePage() {
   const [deleteTarget, setDeleteTarget] = useState<Annotation | null>(null);
   const [popup, setPopup] = useState<mapboxgl.Popup | null>(null);
   const [entered, setEntered] = useState(false);
+  const [pendingSpot, setPendingSpot] = useState<GeocoderResult | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
@@ -260,23 +263,26 @@ export default function HomePage() {
     if (popup) popup.remove();
   }, [deleteTarget, deleteAnnotation, popup]);
 
-  const handleCreateSpot = useCallback(() => {
-    if (!map) return;
-    const center = map.getCenter();
-    const zoom = map.getZoom();
+  const handleGeocoderResult = useCallback((result: GeocoderResult) => {
+    setPendingSpot(result);
+  }, []);
+
+  const confirmSaveSpot = useCallback(() => {
+    if (!pendingSpot) return;
     const spot: Spot = {
       id: uuidv4(),
       userId: '',
-      name: 'Nouveau spot',
+      name: pendingSpot.name,
       description: '',
-      centerLat: center.lat,
-      centerLng: center.lng,
-      zoomLevel: zoom,
+      centerLat: pendingSpot.center[1],
+      centerLng: pendingSpot.center[0],
+      zoomLevel: pendingSpot.bbox ? 14 : 15,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
     createSpot(spot);
-  }, [map, createSpot]);
+    setPendingSpot(null);
+  }, [pendingSpot, createSpot]);
 
   const handleDeleteSpot = useCallback(
     async (id: string) => {
@@ -298,6 +304,10 @@ export default function HomePage() {
   const handleAnnotationSelect = useCallback(
     (ann: Annotation) => {
       setSelectedAnnotation(ann);
+      setEditingAnnotation(ann);
+      setFormMode('edit');
+
+      if (popup) popup.remove();
 
       if (!map) return;
 
@@ -314,7 +324,7 @@ export default function HomePage() {
 
       map.flyTo({ center: lngLat, zoom: 16, duration: 1000 });
     },
-    [map]
+    [map, popup]
   );
 
   if (status === 'loading') {
@@ -345,7 +355,6 @@ export default function HomePage() {
       setEditingAnnotation(null);
       setFormMode(null);
     },
-    onCreateSpot: handleCreateSpot,
     onDeleteSpot: handleDeleteSpot,
     onUpdateSpot: handleUpdateSpot,
     formMode,
@@ -376,7 +385,7 @@ export default function HomePage() {
         )}
 
         <div className="relative flex-1">
-          <Map onMapReady={setMap} initialZoom={11} />
+          <Map onMapReady={setMap} onGeocoderResult={handleGeocoderResult} initialZoom={11} />
 
           <AnnotationRenderer
             map={map}
@@ -404,6 +413,13 @@ export default function HomePage() {
         label={deleteTarget?.label ?? ''}
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
+      />
+
+      <SaveSpotDialog
+        open={!!pendingSpot}
+        name={pendingSpot?.name ?? ''}
+        onConfirm={confirmSaveSpot}
+        onCancel={() => setPendingSpot(null)}
       />
     </div>
   );

@@ -20,7 +20,6 @@ interface BottomSheetProps {
   onSave: (annotation: Annotation) => void;
   onDelete: (id: string) => void;
   onCancelEdit: () => void;
-  onCreateSpot: () => void;
   onDeleteSpot: (id: string) => void;
   onUpdateSpot: (id: string, updates: Partial<Spot>) => void;
   formMode: 'create' | 'edit' | null;
@@ -38,7 +37,6 @@ export function BottomSheet({
   onSave,
   onDelete,
   onCancelEdit,
-  onCreateSpot,
   onDeleteSpot,
   onUpdateSpot,
   formMode,
@@ -130,7 +128,6 @@ export function BottomSheet({
                 onAnnotationSelect(ann);
                 setState('collapsed');
               }}
-              onCreateSpot={onCreateSpot}
               onDeleteSpot={onDeleteSpot}
               onUpdateSpot={onUpdateSpot}
               selectedId={selectedAnnotation?.id ?? null}
