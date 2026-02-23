@@ -18,12 +18,25 @@ export interface GeoPoint {
   lat: number;
 }
 
+export interface Spot {
+  id: string;
+  userId: string;
+  name: string;
+  description: string;
+  centerLat: number;
+  centerLng: number;
+  zoomLevel: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BaseAnnotation {
   id: string;
   type: AnnotationType;
   userId: string;
   label: string;
   notes: string;
+  spotId?: string | null;
   createdAt: string;
   updatedAt: string;
   visible?: boolean;

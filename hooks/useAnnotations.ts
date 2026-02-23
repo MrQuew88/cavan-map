@@ -105,6 +105,7 @@ export function useAnnotations() {
 
   return {
     annotations,
+    setAnnotations,
     loading,
     error,
     createAnnotation,

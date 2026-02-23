@@ -14,12 +14,14 @@ import { AnnotationRenderer } from '@/components/AnnotationRenderer';
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog';
 import { LoginButton } from '@/components/LoginButton';
 import { useAnnotations } from '@/hooks/useAnnotations';
+import { useSpots } from '@/hooks/useSpots';
 import { useMapDraw } from '@/hooks/useMapDraw';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
 import { getNextLabel } from '@/lib/labels';
 import { DEFAULT_VISIBILITY, ANNOTATION_LABELS } from '@/lib/constants';
 import type {
   Annotation,
+  Spot,
   Tool,
   VisibilityState,
   GeoPoint,
@@ -66,10 +68,18 @@ export default function HomePage() {
 
   const {
     annotations,
+    setAnnotations,
     createAnnotation,
     updateAnnotation,
     deleteAnnotation,
   } = useAnnotations();
+
+  const {
+    spots,
+    createSpot,
+    updateSpot,
+    deleteSpot,
+  } = useSpots();
 
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const [activeTool, setActiveTool] = useState<Tool>('pointer');
@@ -233,6 +243,42 @@ export default function HomePage() {
     if (popup) popup.remove();
   }, [deleteTarget, deleteAnnotation, popup]);
 
+  const handleCreateSpot = useCallback(() => {
+    if (!map) return;
+    const center = map.getCenter();
+    const zoom = map.getZoom();
+    const spot: Spot = {
+      id: uuidv4(),
+      userId: '',
+      name: 'Nouveau spot',
+      description: '',
+      centerLat: center.lat,
+      centerLng: center.lng,
+      zoomLevel: zoom,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    createSpot(spot);
+  }, [map, createSpot]);
+
+  const handleDeleteSpot = useCallback(
+    async (id: string) => {
+      await deleteSpot(id);
+      // Optimistically clear spotId on local annotations
+      setAnnotations((prev) =>
+        prev.map((a) => (a.spotId === id ? { ...a, spotId: null } as Annotation : a))
+      );
+    },
+    [deleteSpot, setAnnotations]
+  );
+
+  const handleUpdateSpot = useCallback(
+    async (id: string, updates: Partial<Spot>) => {
+      await updateSpot(id, updates);
+    },
+    [updateSpot]
+  );
+
   const handleAnnotationSelect = useCallback(
     (ann: Annotation) => {
       setSelectedAnnotation(ann);
@@ -270,6 +316,8 @@ export default function HomePage() {
 
   const sharedProps = {
     annotations,
+    spots,
+    map,
     visibility,
     onVisibilityChange: setVisibility,
     onAnnotationSelect: handleAnnotationSelect,
@@ -281,6 +329,9 @@ export default function HomePage() {
       setEditingAnnotation(null);
       setFormMode(null);
     },
+    onCreateSpot: handleCreateSpot,
+    onDeleteSpot: handleDeleteSpot,
+    onUpdateSpot: handleUpdateSpot,
     formMode,
   };
 

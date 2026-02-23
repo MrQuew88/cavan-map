@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { Annotation, AnnotationType } from '@/lib/types';
+import type { Annotation, AnnotationType, Spot } from '@/lib/types';
 import {
   SEASONS,
   CONFIDENCE_LEVELS,
@@ -14,6 +14,7 @@ import {
 interface AnnotationFormProps {
   annotation: Annotation;
   mode: 'create' | 'edit';
+  spots: Spot[];
   onSave: (annotation: Annotation) => void;
   onCancel: () => void;
   onDelete?: () => void;
@@ -22,6 +23,7 @@ interface AnnotationFormProps {
 export function AnnotationForm({
   annotation,
   mode,
+  spots,
   onSave,
   onCancel,
   onDelete,
@@ -74,6 +76,20 @@ export function AnnotationForm({
           className="input-field min-h-[64px] resize-y"
           placeholder="Ajouter des notes…"
         />
+      </Field>
+
+      <Field label="Spot" htmlFor={`spot-${annotation.id}`}>
+        <select
+          id={`spot-${annotation.id}`}
+          value={data.spotId ?? ''}
+          onChange={(e) => update('spotId', e.target.value || null)}
+          className="input-field"
+        >
+          <option value="">Non classé</option>
+          {spots.map((s) => (
+            <option key={s.id} value={s.id}>{s.name}</option>
+          ))}
+        </select>
       </Field>
 
       {renderTypeFields(data, update, annotation.id)}

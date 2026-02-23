@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import type { Annotation, VisibilityState } from '@/lib/types';
+import type { Annotation, VisibilityState, Spot } from '@/lib/types';
 import { AnnotationList } from './AnnotationList';
 import { AnnotationForm } from './AnnotationForm';
+import mapboxgl from 'mapbox-gl';
 
 type SheetState = 'collapsed' | 'half' | 'full';
 
 interface BottomSheetProps {
   annotations: Annotation[];
+  spots: Spot[];
+  map: mapboxgl.Map | null;
   visibility: VisibilityState;
   onVisibilityChange: (visibility: VisibilityState) => void;
   onAnnotationSelect: (annotation: Annotation) => void;
@@ -17,11 +20,16 @@ interface BottomSheetProps {
   onSave: (annotation: Annotation) => void;
   onDelete: (id: string) => void;
   onCancelEdit: () => void;
+  onCreateSpot: () => void;
+  onDeleteSpot: (id: string) => void;
+  onUpdateSpot: (id: string, updates: Partial<Spot>) => void;
   formMode: 'create' | 'edit' | null;
 }
 
 export function BottomSheet({
   annotations,
+  spots,
+  map,
   visibility,
   onVisibilityChange,
   onAnnotationSelect,
@@ -30,6 +38,9 @@ export function BottomSheet({
   onSave,
   onDelete,
   onCancelEdit,
+  onCreateSpot,
+  onDeleteSpot,
+  onUpdateSpot,
   formMode,
 }: BottomSheetProps) {
   const [state, setState] = useState<SheetState>('collapsed');
@@ -48,9 +59,8 @@ export function BottomSheet({
   const handleTouchEnd = useCallback((e: React.TouchEvent) => {
     const deltaY = startY.current - e.changedTouches[0].clientY;
     const elapsed = Date.now() - startTime.current;
-    const velocity = Math.abs(deltaY) / elapsed; // px/ms
+    const velocity = Math.abs(deltaY) / elapsed;
 
-    // Momentum-based dismiss: use velocity threshold (Emil Kowalski: 0.11 px/ms)
     const useVelocity = velocity > 0.11;
     const threshold = useVelocity ? 20 : 50;
 
@@ -96,6 +106,7 @@ export function BottomSheet({
               <AnnotationForm
                 annotation={editingAnnotation}
                 mode={formMode}
+                spots={spots}
                 onSave={onSave}
                 onCancel={() => {
                   onCancelEdit();
@@ -111,12 +122,17 @@ export function BottomSheet({
           ) : (
             <AnnotationList
               annotations={annotations}
+              spots={spots}
+              map={map}
               visibility={visibility}
               onVisibilityChange={onVisibilityChange}
               onAnnotationSelect={(ann) => {
                 onAnnotationSelect(ann);
                 setState('collapsed');
               }}
+              onCreateSpot={onCreateSpot}
+              onDeleteSpot={onDeleteSpot}
+              onUpdateSpot={onUpdateSpot}
               selectedId={selectedAnnotation?.id ?? null}
             />
           )}
