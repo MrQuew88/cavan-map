@@ -44,14 +44,16 @@ export async function POST() {
 
     await sql`CREATE INDEX IF NOT EXISTS idx_annotations_user_id ON annotations(user_id)`;
     await sql`CREATE INDEX IF NOT EXISTS idx_annotations_type ON annotations(type)`;
-    await sql`CREATE INDEX IF NOT EXISTS idx_annotations_spot_id ON annotations(spot_id)`;
 
     // Add spot_id column to existing annotations table (idempotent)
+    // Must run before creating the index on spot_id
     try {
       await sql`ALTER TABLE annotations ADD COLUMN IF NOT EXISTS spot_id VARCHAR(36) REFERENCES spots(id) ON DELETE SET NULL`;
     } catch {
       // Column may already exist
     }
+
+    await sql`CREATE INDEX IF NOT EXISTS idx_annotations_spot_id ON annotations(spot_id)`;
 
     return NextResponse.json({ success: true });
   } catch (error) {
