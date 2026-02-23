@@ -175,7 +175,7 @@ body {
   border: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.15);
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 14px;
   font-family: var(--font-sans);
   line-height: 1.5;
   outline: none;

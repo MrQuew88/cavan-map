@@ -108,7 +108,7 @@ export function AnnotationList({
     <div className="hide-scrollbar flex-1 overflow-y-auto" role="list" aria-label="Liste des annotations">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-2.5">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
+        <span className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
           Spots
         </span>
         <button
@@ -166,7 +166,7 @@ export function AnnotationList({
                     {spot.name}
                   </span>
                 )}
-                <span className="min-w-[18px] text-center font-mono text-[10px] text-[var(--text-tertiary)]">
+                <span className="min-w-[18px] text-center font-mono text-sm text-[var(--text-tertiary)]">
                   {spotAnnotations.length}
                 </span>
                 <svg
@@ -232,7 +232,7 @@ export function AnnotationList({
                   );
                 })}
                 {spotAnnotations.length === 0 && (
-                  <div className="px-4 py-2 pl-9 text-[11px] italic text-[var(--text-tertiary)]">
+                  <div className="px-4 py-2 pl-9 text-sm italic text-[var(--text-tertiary)]">
                     Aucune annotation
                   </div>
                 )}
@@ -257,7 +257,7 @@ export function AnnotationList({
             <span className="flex-1 font-serif text-[15px] font-medium text-[var(--text-secondary)]">
               Non class\u00e9
             </span>
-            <span className="min-w-[18px] text-center font-mono text-[10px] text-[var(--text-tertiary)]">
+            <span className="min-w-[18px] text-center font-mono text-sm text-[var(--text-tertiary)]">
               {unassignedAnnotations.length}
             </span>
             <svg
@@ -297,7 +297,7 @@ export function AnnotationList({
 
       {/* Global visibility toggles */}
       <div className="border-b border-[var(--border)] px-4 py-2">
-        <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
+        <span className="text-sm font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
           Visibilit\u00e9
         </span>
       </div>
@@ -311,7 +311,7 @@ export function AnnotationList({
               boxShadow: visibility[type] ? `0 0 6px ${ANNOTATION_COLORS[type]}40` : 'none',
             }}
           />
-          <span className={`flex-1 text-[12px] ${visibility[type] ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)]'}`}>
+          <span className={`flex-1 text-sm ${visibility[type] ? 'text-[var(--text-primary)]' : 'text-[var(--text-tertiary)]'}`}>
             {ANNOTATION_LABELS[type]}
           </span>
           <button
@@ -381,10 +381,10 @@ function TypeGroup({
               boxShadow: isVisible ? `0 0 4px ${ANNOTATION_COLORS[type]}40` : 'none',
             }}
           />
-          <span className={`flex-1 text-[11px] font-medium transition-colors duration-150 ${isVisible ? 'text-[var(--text-secondary)]' : 'text-[var(--text-tertiary)]'}`}>
+          <span className={`flex-1 text-sm font-medium transition-colors duration-150 ${isVisible ? 'text-[var(--text-secondary)]' : 'text-[var(--text-tertiary)]'}`}>
             {ANNOTATION_LABELS[type]}
           </span>
-          <span className="min-w-[14px] text-center font-mono text-[9px] text-[var(--text-tertiary)]">
+          <span className="min-w-[14px] text-center font-mono text-sm text-[var(--text-tertiary)]">
             {items.length}
           </span>
           <svg
@@ -438,12 +438,12 @@ function TypeGroup({
               }}
             >
               <span
-                className="font-mono text-[11px] font-semibold text-[var(--accent)]"
+                className="font-mono text-sm font-semibold text-[var(--accent)]"
                 style={selectedId === ann.id ? { textShadow: '0 0 6px rgba(212, 145, 92, 0.3)' } : undefined}
               >
                 {ann.label}
               </span>
-              <span className="flex-1 truncate text-[11px] text-[var(--text-tertiary)]">
+              <span className="flex-1 truncate text-sm text-[var(--text-tertiary)]">
                 {getAnnotationSummary(ann)}
               </span>
             </button>

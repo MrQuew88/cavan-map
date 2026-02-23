@@ -101,7 +101,7 @@ export function AnnotationForm({
       <div className="flex gap-2 pt-1">
         <button
           type="submit"
-          className="btn-press flex-1 rounded-xl px-4 py-2.5 text-[13px] font-semibold transition-colors duration-150"
+          className="btn-press flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-150"
           style={{
             backgroundColor: 'var(--accent)',
             color: 'var(--bg)',
@@ -112,7 +112,7 @@ export function AnnotationForm({
         <button
           type="button"
           onClick={onCancel}
-          className="btn-press rounded-xl px-4 py-2.5 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-150"
+          className="btn-press rounded-xl px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition-colors duration-150"
           style={{ backgroundColor: 'rgba(205, 180, 140, 0.06)' }}
           onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.1)')}
           onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.06)')}
@@ -123,7 +123,7 @@ export function AnnotationForm({
           <button
             type="button"
             onClick={onDelete}
-            className="btn-press rounded-xl px-4 py-2.5 text-[13px] font-medium text-[var(--destructive)] transition-colors duration-150"
+            className="btn-press rounded-xl px-4 py-2.5 text-sm font-medium text-[var(--destructive)] transition-colors duration-150"
             style={{ backgroundColor: 'var(--destructive-muted)' }}
           >
             Supprimer
@@ -137,7 +137,7 @@ export function AnnotationForm({
 function Field({ label, htmlFor, children }: { label: string; htmlFor?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={htmlFor} className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
+      <label htmlFor={htmlFor} className="text-sm font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
         {label}
       </label>
       {children}
@@ -200,7 +200,7 @@ function DepthInput({
           onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
           className="input-field w-full pr-10"
         />
-        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-[12px] font-medium text-[var(--text-tertiary)]">
+        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-mono text-sm font-medium text-[var(--text-tertiary)]">
           m
         </span>
       </div>

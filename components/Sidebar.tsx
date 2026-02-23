@@ -47,10 +47,10 @@ export function Sidebar({
       style={{ background: 'rgba(34, 31, 25, 0.85)' }}
     >
       <div className="paper-grain relative flex items-center justify-between border-b border-[var(--border)] px-4 py-3.5">
-        <h2 className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
+        <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
           Annotations
         </h2>
-        <span className="font-mono text-[10px] text-[var(--text-tertiary)]">
+        <span className="font-mono text-sm text-[var(--text-tertiary)]">
           {annotations.length}
         </span>
       </div>
