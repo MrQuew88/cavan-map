@@ -56,15 +56,19 @@ export function AnnotationForm({
   const accentColor = ANNOTATION_COLORS[data.type];
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="stagger-enter flex flex-col gap-4 p-4" aria-label={`${mode === 'create' ? 'Créer' : 'Modifier'} ${ANNOTATION_LABELS[data.type]}`}>
+    <form ref={formRef} onSubmit={handleSubmit} className="stagger-enter flex flex-col gap-4 p-4" aria-label={`${mode === 'create' ? 'Cr\u00e9er' : 'Modifier'} ${ANNOTATION_LABELS[data.type]}`}>
       <div className="flex items-center gap-2.5">
         <div
           className="h-2.5 w-2.5 rounded-full"
-          style={{ backgroundColor: accentColor, boxShadow: `0 0 8px ${accentColor}50` }}
+          style={{
+            backgroundColor: accentColor,
+            boxShadow: `0 0 8px ${accentColor}50`,
+            animation: 'dot-pulse 200ms ease-out',
+          }}
           aria-hidden="true"
         />
         <h3 className="text-sm font-semibold text-[var(--text-primary)]">
-          {mode === 'create' ? 'Nouveau' : 'Modifier'} — {ANNOTATION_LABELS[data.type]}
+          {mode === 'create' ? 'Nouveau' : 'Modifier'} \u2014 {ANNOTATION_LABELS[data.type]}
         </h3>
       </div>
 
@@ -74,7 +78,7 @@ export function AnnotationForm({
           value={data.notes}
           onChange={(e) => update('notes', e.target.value)}
           className="input-field min-h-[64px] resize-y"
-          placeholder="Ajouter des notes…"
+          placeholder="Ajouter des notes\u2026"
         />
       </Field>
 
@@ -85,7 +89,7 @@ export function AnnotationForm({
           onChange={(e) => update('spotId', e.target.value || null)}
           className="input-field"
         >
-          <option value="">Non classé</option>
+          <option value="">Non class\u00e9</option>
           {spots.map((s) => (
             <option key={s.id} value={s.id}>{s.name}</option>
           ))}
@@ -103,12 +107,15 @@ export function AnnotationForm({
             color: 'var(--bg)',
           }}
         >
-          {mode === 'create' ? 'Créer' : 'Enregistrer'}
+          {mode === 'create' ? 'Cr\u00e9er' : 'Enregistrer'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="btn-press rounded-xl bg-white/6 px-4 py-2.5 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-150 hover:bg-white/10"
+          className="btn-press rounded-xl px-4 py-2.5 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-150"
+          style={{ backgroundColor: 'rgba(205, 180, 140, 0.06)' }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.1)')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.06)')}
         >
           Annuler
         </button>
@@ -234,7 +241,7 @@ function renderTypeFields(
     case 'spawn_zone':
       return (
         <>
-          <Field label="Espèce" htmlFor={`species-${annId}`}>
+          <Field label="Esp\u00e8ce" htmlFor={`species-${annId}`}>
             <input id={`species-${annId}`} type="text" value={data.species} onChange={(e) => update('species', e.target.value)} className="input-field" />
           </Field>
           <SelectField label="Saison" id={`season-${annId}`} value={data.season} options={SEASONS} labelMap={SEASON_LABELS} onChange={(v) => update('season', v)} />

@@ -81,11 +81,11 @@ export function BottomSheet({
     <div
       role="region"
       aria-label="Panneau d'annotations"
-      className={`fixed inset-x-0 bottom-0 z-40 rounded-t-2xl shadow-2xl shadow-black/50 ring-1 ring-[var(--border)] backdrop-blur-xl ${heightClass}`}
+      className={`fixed inset-x-0 bottom-0 z-40 rounded-t-2xl shadow-2xl shadow-black/40 ring-1 ring-[var(--border)] backdrop-blur-xl ${heightClass}`}
       style={{
         transition: 'height 500ms cubic-bezier(0.32, 0.72, 0, 1)',
         willChange: 'height',
-        background: 'rgba(10, 10, 22, 0.75)',
+        background: 'rgba(34, 31, 25, 0.85)',
       }}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
@@ -96,7 +96,7 @@ export function BottomSheet({
         aria-label={state === 'collapsed' ? 'Ouvrir le panneau' : 'Fermer le panneau'}
         aria-expanded={state !== 'collapsed'}
       >
-        <div className="h-1 w-9 rounded-full bg-[var(--text-tertiary)]/60" />
+        <div className="h-1 w-9 rounded-full" style={{ backgroundColor: 'rgba(212, 145, 92, 0.4)' }} />
       </button>
 
       {state !== 'collapsed' && (

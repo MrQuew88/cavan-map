@@ -1,28 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Lexend', system-ui, sans-serif;
-  --font-mono: 'Azeret Mono', 'Fira Code', ui-monospace, monospace;
+  --font-sans: 'Source Sans 3', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-ios: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 :root {
-  --bg: #06060c;
-  --panel: #0a0a16;
-  --panel-raised: #111124;
-  --surface: #18183a;
-  --border: rgba(255, 255, 255, 0.06);
-  --border-hover: rgba(255, 255, 255, 0.12);
-  --text-primary: #f0f0f5;
-  --text-secondary: #8888a0;
-  --text-tertiary: #555570;
-  --accent: #22d3ee;
-  --accent-hover: #06b6d4;
-  --accent-muted: rgba(34, 211, 238, 0.12);
-  --destructive: #f43f5e;
-  --destructive-muted: rgba(244, 63, 94, 0.15);
-  --focus-ring: rgba(34, 211, 238, 0.5);
+  --bg: #1a1712;
+  --panel: #221f19;
+  --panel-raised: #2c2820;
+  --surface: #362f26;
+  --border: rgba(205, 180, 140, 0.08);
+  --border-hover: rgba(205, 180, 140, 0.16);
+  --text-primary: #ede6db;
+  --text-secondary: #a89882;
+  --text-tertiary: #6d6052;
+  --accent: #d4915c;
+  --accent-hover: #c07a45;
+  --accent-muted: rgba(212, 145, 92, 0.12);
+  --destructive: #c75450;
+  --destructive-muted: rgba(199, 84, 80, 0.15);
+  --focus-ring: rgba(212, 145, 92, 0.5);
+  --lough: #4a8c7e;
 }
 
 body {
@@ -47,7 +49,7 @@ body {
   z-index: 100;
   padding: 8px 16px;
   background: var(--accent);
-  color: #000;
+  color: #1a1712;
   font-weight: 600;
   font-size: 13px;
   border-radius: 0 0 8px 8px;
@@ -57,6 +59,33 @@ body {
   top: 0;
 }
 
+/* ── Paper grain noise overlay ── */
+.paper-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+/* ── Contour lines pattern ── */
+.contour-bg {
+  position: relative;
+}
+.contour-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 80c30-15 60 5 100-10s70 20 100-5' fill='none' stroke='%23cdb48c' stroke-width='0.8'/%3E%3Cpath d='M0 120c40 10 60-15 100 5s60-10 100 0' fill='none' stroke='%23cdb48c' stroke-width='0.6'/%3E%3Cpath d='M0 160c25-8 75 12 100-3s50 15 100-8' fill='none' stroke='%23cdb48c' stroke-width='0.5'/%3E%3Cpath d='M0 40c35 10 65-10 100 5s65-8 100 3' fill='none' stroke='%23cdb48c' stroke-width='0.4'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  animation: contour-drift 60s linear infinite;
+}
+
 /* ── Mapbox controls ── */
 .mapboxgl-ctrl-attrib {
   font-size: 10px !important;
@@ -64,13 +93,13 @@ body {
 }
 
 .mapboxgl-popup-content {
-  background: rgba(17, 17, 36, 0.8) !important;
+  background: rgba(44, 40, 32, 0.9) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   color: var(--text-primary) !important;
   border-radius: 14px !important;
   padding: 0 !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border) !important;
   border: none !important;
 }
 
@@ -92,7 +121,7 @@ body {
 .mapboxgl-ctrl-geocoder {
   background-color: var(--panel-raised) !important;
   color: var(--text-primary) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--border) !important;
   border-radius: 12px !important;
   border: none !important;
   font-family: var(--font-sans) !important;
@@ -116,7 +145,7 @@ body {
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions {
   background-color: var(--panel-raised) !important;
   border-radius: 12px !important;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border) !important;
   border: none !important;
   overflow: hidden !important;
 }
@@ -128,7 +157,7 @@ body {
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > .active > a,
 .mapboxgl-ctrl-geocoder .suggestions-wrapper .suggestions > li > a:hover {
   background-color: var(--accent-muted) !important;
-  color: #fff !important;
+  color: var(--text-primary) !important;
 }
 .mapboxgl-ctrl-geocoder--powered-by {
   display: none !important;
@@ -144,12 +173,13 @@ body {
   padding: 10px 13px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(0, 0, 0, 0.15);
   color: var(--text-primary);
   font-size: 13px;
   font-family: var(--font-sans);
   line-height: 1.5;
   outline: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: border-color 0.2s var(--ease-out-expo),
               box-shadow 0.2s var(--ease-out-expo);
 }
@@ -158,7 +188,7 @@ body {
 }
 .input-field:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-muted);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2), 0 0 0 3px var(--accent-muted);
 }
 .input-field::placeholder {
   color: var(--text-tertiary);
@@ -188,6 +218,31 @@ body {
 @keyframes dialog-overlay {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* ── Sidebar enter ── */
+@keyframes sidebar-enter {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Contour drift ── */
+@keyframes contour-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 200px 100px; }
+}
+
+/* ── Instruction slide-down ── */
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Form dot pulse ── */
+@keyframes dot-pulse {
+  0%   { transform: scale(0.95); }
+  50%  { transform: scale(1); }
+  100% { transform: scale(1); }
 }
 
 /* ── Stagger children reveal ── */

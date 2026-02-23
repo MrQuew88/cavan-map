@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,7 +18,7 @@ import { useSpots } from '@/hooks/useSpots';
 import { useMapDraw } from '@/hooks/useMapDraw';
 import { useIsDesktop } from '@/hooks/useMediaQuery';
 import { getNextLabel } from '@/lib/labels';
-import { DEFAULT_VISIBILITY, ANNOTATION_LABELS } from '@/lib/constants';
+import { DEFAULT_VISIBILITY, ANNOTATION_LABELS, MAP_CONFIG } from '@/lib/constants';
 import type {
   Annotation,
   Spot,
@@ -65,6 +65,7 @@ export default function HomePage() {
   const { status } = useSession();
   const router = useRouter();
   const isDesktop = useIsDesktop();
+  const hasAnimated = useRef(false);
 
   const {
     annotations,
@@ -89,10 +90,26 @@ export default function HomePage() {
   const [visibility, setVisibility] = useState<VisibilityState>(DEFAULT_VISIBILITY);
   const [deleteTarget, setDeleteTarget] = useState<Annotation | null>(null);
   const [popup, setPopup] = useState<mapboxgl.Popup | null>(null);
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
   }, [status, router]);
+
+  // Entrance orchestration: fly-in + UI reveal
+  useEffect(() => {
+    if (!map || hasAnimated.current) return;
+    hasAnimated.current = true;
+
+    map.flyTo({
+      center: MAP_CONFIG.center,
+      zoom: MAP_CONFIG.zoom,
+      duration: 2000,
+      easing: (t) => 1 - Math.pow(1 - t, 3), // ease-out cubic
+    });
+
+    setTimeout(() => setEntered(true), 200);
+  }, [map]);
 
   const getLabel = useCallback(
     (type: AnnotationType) => {
@@ -186,13 +203,13 @@ export default function HomePage() {
 
       const typeLabel = ANNOTATION_LABELS[ann.type];
       root.innerHTML = `
-        <div style="min-width:190px;padding:14px;font-family:'Lexend',system-ui,sans-serif">
+        <div style="min-width:190px;padding:14px;font-family:'Source Sans 3',system-ui,sans-serif">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
-            <span style="font-size:11px;color:var(--text-tertiary,#555570);font-weight:500;letter-spacing:0.03em">${typeLabel}</span>
-            <span style="margin-left:auto;font-family:'Azeret Mono',monospace;font-size:14px;font-weight:600;color:white">${ann.label}</span>
+            <span style="font-size:11px;color:var(--text-tertiary,#6d6052);font-weight:500;letter-spacing:0.03em">${typeLabel}</span>
+            <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--text-primary,#ede6db)">${ann.label}</span>
           </div>
-          <div style="font-size:12px;color:var(--text-secondary,#8888a0);margin-bottom:12px;line-height:1.5">${ann.notes || 'Aucune note'}</div>
-          <button id="popup-edit" style="background:var(--accent,#22d3ee);color:#06060c;border:none;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;width:100%;font-family:'Lexend',sans-serif;letter-spacing:0.01em;transition:opacity 0.15s cubic-bezier(0.16,1,0.3,1)">Modifier</button>
+          <div style="font-size:12px;color:var(--text-secondary,#a89882);margin-bottom:12px;line-height:1.5">${ann.notes || 'Aucune note'}</div>
+          <button id="popup-edit" style="background:var(--accent,#d4915c);color:#1a1712;border:none;border-radius:10px;padding:8px 16px;font-size:12px;font-weight:600;cursor:pointer;width:100%;font-family:'Source Sans 3',sans-serif;letter-spacing:0.01em;transition:opacity 0.15s cubic-bezier(0.16,1,0.3,1)">Modifier</button>
         </div>
       `;
 
@@ -264,7 +281,6 @@ export default function HomePage() {
   const handleDeleteSpot = useCallback(
     async (id: string) => {
       await deleteSpot(id);
-      // Optimistically clear spotId on local annotations
       setAnnotations((prev) =>
         prev.map((a) => (a.spotId === id ? { ...a, spotId: null } as Annotation : a))
       );
@@ -306,7 +322,7 @@ export default function HomePage() {
       <div className="flex h-dvh items-center justify-center bg-[var(--bg)]" role="status">
         <div className="flex flex-col items-center gap-4">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--accent)]/20 border-t-[var(--accent)]" />
-          <span className="text-xs font-light tracking-wide text-[var(--text-tertiary)]">Chargement…</span>
+          <span className="text-xs font-light tracking-wide text-[var(--text-tertiary)]">Chargement\u2026</span>
         </div>
       </div>
     );
@@ -337,7 +353,10 @@ export default function HomePage() {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
-      <header className="flex h-11 shrink-0 items-center justify-between border-b border-[var(--border)] px-4 backdrop-blur-xl" style={{ background: 'rgba(10, 10, 22, 0.7)' }}>
+      <header
+        className="flex h-11 shrink-0 items-center justify-between border-b border-[var(--border)] px-4 backdrop-blur-xl"
+        style={{ background: 'rgba(34, 31, 25, 0.8)' }}
+      >
         <h1 className="text-[13px] font-semibold tracking-tight text-[var(--text-primary)]">
           Cavan<span className="ml-1 font-light text-[var(--text-tertiary)]">Map</span>
         </h1>
@@ -345,10 +364,19 @@ export default function HomePage() {
       </header>
 
       <div id="main-content" className="relative flex flex-1 overflow-hidden">
-        {isDesktop && <Sidebar {...sharedProps} />}
+        {isDesktop && (
+          <div
+            style={{
+              animation: entered ? 'sidebar-enter 500ms cubic-bezier(0.32, 0.72, 0, 1) forwards' : 'none',
+              opacity: entered ? undefined : 0,
+            }}
+          >
+            <Sidebar {...sharedProps} />
+          </div>
+        )}
 
         <div className="relative flex-1">
-          <Map onMapReady={setMap} />
+          <Map onMapReady={setMap} initialZoom={11} />
 
           <AnnotationRenderer
             map={map}
@@ -357,7 +385,13 @@ export default function HomePage() {
             onAnnotationClick={handleAnnotationClick}
           />
 
-          <div className="absolute left-1/2 top-3 z-10 -translate-x-1/2">
+          <div
+            className="absolute left-1/2 top-3 z-10 -translate-x-1/2"
+            style={{
+              animation: entered ? 'fade-in-up 300ms cubic-bezier(0.16, 1, 0.3, 1) 400ms forwards' : 'none',
+              opacity: entered ? undefined : 0,
+            }}
+          >
             <Toolbar activeTool={activeTool} onToolChange={setActiveTool} />
           </div>
         </div>

@@ -9,13 +9,13 @@ export const MAP_CONFIG = {
 };
 
 export const ANNOTATION_COLORS: Record<AnnotationType, string> = {
-  target_zone: '#ff6b35',
-  depth_point: '#4da6ff',
-  isobath: '#00c9a7',
-  dropoff: '#ff4444',
-  spawn_zone: '#4caf50',
-  accumulation_zone: '#e040fb',
-  note: '#ffffff',
+  target_zone: '#d4915c',
+  depth_point: '#5b9aba',
+  isobath: '#4a8c7e',
+  dropoff: '#c75450',
+  spawn_zone: '#7a9e5a',
+  accumulation_zone: '#9b7bb5',
+  note: '#c9b87a',
 };
 
 export const ANNOTATION_LABELS: Record<AnnotationType, string> = {

@@ -113,8 +113,11 @@ export function AnnotationList({
         </span>
         <button
           onClick={onCreateSpot}
-          className="flex h-5 w-5 items-center justify-center rounded-md text-[var(--text-tertiary)] transition-colors duration-150 hover:bg-white/6 hover:text-[var(--accent)]"
-          aria-label="Créer un spot"
+          className="flex h-5 w-5 items-center justify-center rounded-md text-[var(--text-tertiary)] transition-colors duration-150 hover:text-[var(--accent)]"
+          style={{ backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(212, 145, 92, 0.08)')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+          aria-label="Cr\u00e9er un spot"
         >
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="M12 5v14M5 12h14" />
@@ -129,7 +132,7 @@ export function AnnotationList({
         const isSpotCollapsed = collapsed[spotKey];
 
         return (
-          <div key={spot.id} className="border-b border-[var(--border)]" role="listitem">
+          <div key={spot.id} className="border-b border-[var(--border)]" role="listitem" style={{ borderLeft: '2px solid var(--accent)' }}>
             {/* Spot header */}
             <div className="flex w-full items-center gap-2 px-4 py-2.5">
               <button
@@ -139,7 +142,7 @@ export function AnnotationList({
                 }}
                 className="flex flex-1 items-center gap-2.5 text-left transition-colors duration-150 hover:opacity-80"
                 aria-expanded={!isSpotCollapsed}
-                aria-label={`${spot.name} — ${isSpotCollapsed ? 'développer' : 'réduire'}`}
+                aria-label={`${spot.name} \u2014 ${isSpotCollapsed ? 'd\u00e9velopper' : 'r\u00e9duire'}`}
               >
                 <svg className="h-3 w-3 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
@@ -156,10 +159,10 @@ export function AnnotationList({
                       if (e.key === 'Escape') setEditingSpotId(null);
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1 bg-transparent text-[13px] font-medium text-[var(--text-primary)] outline-none ring-1 ring-[var(--accent)]/30 rounded px-1"
+                    className="flex-1 bg-transparent font-serif text-[15px] font-medium text-[var(--text-primary)] outline-none ring-1 ring-[var(--accent)]/30 rounded px-1"
                   />
                 ) : (
-                  <span className="flex-1 text-[13px] font-medium text-[var(--text-primary)]">
+                  <span className="flex-1 font-serif text-[15px] font-medium text-[var(--text-primary)]">
                     {spot.name}
                   </span>
                 )}
@@ -179,7 +182,10 @@ export function AnnotationList({
                 <>
                   <button
                     onClick={(e) => startEditSpot(spot, e)}
-                    className="rounded-md p-1.5 text-[var(--text-tertiary)] transition-colors duration-150 hover:bg-white/6 hover:text-[var(--text-secondary)]"
+                    className="rounded-md p-1.5 text-[var(--text-tertiary)] transition-colors duration-150 hover:text-[var(--text-secondary)]"
+                    style={{ backgroundColor: 'transparent' }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.06)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                     aria-label={`Renommer ${spot.name}`}
                   >
                     <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -236,20 +242,20 @@ export function AnnotationList({
         );
       })}
 
-      {/* Non classé */}
-      <div className="border-b border-[var(--border)]" role="listitem">
+      {/* Non class\u00e9 */}
+      <div className="border-b border-[var(--border)]" role="listitem" style={{ borderLeft: '2px dashed var(--text-tertiary)' }}>
         <div className="flex w-full items-center gap-2 px-4 py-2.5">
           <button
             onClick={() => toggleCollapsed('unassigned')}
             className="flex flex-1 items-center gap-2.5 text-left transition-colors duration-150 hover:opacity-80"
             aria-expanded={!collapsed['unassigned']}
-            aria-label={`Non classé — ${collapsed['unassigned'] ? 'développer' : 'réduire'}`}
+            aria-label={`Non class\u00e9 \u2014 ${collapsed['unassigned'] ? 'd\u00e9velopper' : 'r\u00e9duire'}`}
           >
             <svg className="h-3 w-3 text-[var(--text-tertiary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
-            <span className="flex-1 text-[13px] font-medium text-[var(--text-secondary)]">
-              Non classé
+            <span className="flex-1 font-serif text-[15px] font-medium text-[var(--text-secondary)]">
+              Non class\u00e9
             </span>
             <span className="min-w-[18px] text-center font-mono text-[10px] text-[var(--text-tertiary)]">
               {unassignedAnnotations.length}
@@ -292,7 +298,7 @@ export function AnnotationList({
       {/* Global visibility toggles */}
       <div className="border-b border-[var(--border)] px-4 py-2">
         <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--text-tertiary)]">
-          Visibilité
+          Visibilit\u00e9
         </span>
       </div>
       {TYPES.map((type) => (
@@ -310,7 +316,10 @@ export function AnnotationList({
           </span>
           <button
             onClick={() => toggleVisibility(type)}
-            className="rounded-md p-1.5 text-[var(--text-tertiary)] transition-colors duration-150 hover:bg-white/6 hover:text-[var(--text-secondary)]"
+            className="rounded-md p-1.5 text-[var(--text-tertiary)] transition-colors duration-150 hover:text-[var(--text-secondary)]"
+            style={{ backgroundColor: 'transparent' }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.06)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
             aria-label={visibility[type] ? `Masquer ${ANNOTATION_LABELS[type]}` : `Afficher ${ANNOTATION_LABELS[type]}`}
             aria-pressed={visibility[type]}
           >
@@ -361,7 +370,7 @@ function TypeGroup({
         <button
           onClick={onToggleCollapse}
           aria-expanded={!isCollapsed}
-          aria-label={`${ANNOTATION_LABELS[type]} — ${isCollapsed ? 'développer' : 'réduire'}`}
+          aria-label={`${ANNOTATION_LABELS[type]} \u2014 ${isCollapsed ? 'd\u00e9velopper' : 'r\u00e9duire'}`}
           className="flex flex-1 items-center gap-2 text-left transition-colors duration-150 hover:opacity-80"
         >
           <div
@@ -389,7 +398,10 @@ function TypeGroup({
 
         <button
           onClick={onToggleVisibility}
-          className="rounded-md p-1 text-[var(--text-tertiary)] transition-colors duration-150 hover:bg-white/6 hover:text-[var(--text-secondary)]"
+          className="rounded-md p-1 text-[var(--text-tertiary)] transition-colors duration-150 hover:text-[var(--text-secondary)]"
+          style={{ backgroundColor: 'transparent' }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.06)')}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
           aria-label={isVisible ? `Masquer ${ANNOTATION_LABELS[type]}` : `Afficher ${ANNOTATION_LABELS[type]}`}
           aria-pressed={isVisible}
         >
@@ -409,19 +421,26 @@ function TypeGroup({
 
       {!isCollapsed && items.length > 0 && (
         <div className="pb-0.5">
-          {items.map((ann) => (
+          {items.map((ann, i) => (
             <button
               key={ann.id}
               onClick={() => onAnnotationSelect(ann)}
               aria-label={`${ANNOTATION_LABELS[ann.type]} ${ann.label}`}
-              className={`flex w-full items-center gap-2.5 px-4 py-1.5 pl-9 text-left transition-all duration-150 hover:bg-[var(--accent-muted)] ${
+              className={`flex w-full items-center gap-2.5 px-4 py-1.5 pl-9 text-left transition-all duration-150 ${
                 selectedId === ann.id
                   ? 'bg-[var(--accent-muted)] text-[var(--text-primary)]'
-                  : ''
+                  : 'hover:bg-[var(--accent-muted)]'
               }`}
-              style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+              style={{
+                transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                animation: `fade-in-up 150ms cubic-bezier(0.16, 1, 0.3, 1) ${i * 40}ms forwards`,
+                opacity: 0,
+              }}
             >
-              <span className="font-mono text-[11px] font-semibold text-[var(--accent)]">
+              <span
+                className="font-mono text-[11px] font-semibold text-[var(--accent)]"
+                style={selectedId === ann.id ? { textShadow: '0 0 6px rgba(212, 145, 92, 0.3)' } : undefined}
+              >
                 {ann.label}
               </span>
               <span className="flex-1 truncate text-[11px] text-[var(--text-tertiary)]">
@@ -438,17 +457,17 @@ function TypeGroup({
 function getAnnotationSummary(ann: Annotation): string {
   switch (ann.type) {
     case 'target_zone':
-      return [ann.title, ann.depth ? `${ann.depth}m` : ''].filter(Boolean).join(' · ');
+      return [ann.title, ann.depth ? `${ann.depth}m` : ''].filter(Boolean).join(' \u00b7 ');
     case 'depth_point':
       return `${ann.depth}m`;
     case 'isobath':
       return `${ann.depth}m`;
     case 'dropoff':
-      return `${ann.shallowDepth}→${ann.deepDepth}m`;
+      return `${ann.shallowDepth}\u2192${ann.deepDepth}m`;
     case 'spawn_zone':
-      return [ann.species, SEASON_LABELS[ann.season]].filter(Boolean).join(' · ');
+      return [ann.species, SEASON_LABELS[ann.season]].filter(Boolean).join(' \u00b7 ');
     case 'accumulation_zone':
-      return [ann.foodType, SEASON_LABELS[ann.season]].filter(Boolean).join(' · ');
+      return [ann.foodType, SEASON_LABELS[ann.season]].filter(Boolean).join(' \u00b7 ');
     case 'note':
       return ann.notes?.slice(0, 40) || '';
   }

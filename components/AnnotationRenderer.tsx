@@ -12,7 +12,7 @@ interface AnnotationRendererProps {
   onAnnotationClick: (annotation: Annotation) => void;
 }
 
-const MARKER_FONT = "'Azeret Mono', 'Fira Code', monospace";
+const MARKER_FONT = "'JetBrains Mono', ui-monospace, monospace";
 const EASE_OUT = 'cubic-bezier(0.16, 1, 0.3, 1)';
 
 export function AnnotationRenderer({
@@ -45,15 +45,15 @@ export function AnnotationRenderer({
           border: 2px solid rgba(255,255,255,0.25);
           display: flex; align-items: center; justify-content: center;
           font-size: 11px; font-weight: 600; color: white;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 0 0 2px rgba(0,0,0,0.15);
           font-family: ${MARKER_FONT};
           transition: transform 0.15s ${EASE_OUT}, box-shadow 0.15s ${EASE_OUT};
           will-change: transform;
         `;
         inner.textContent = ann.label;
         el.appendChild(inner);
-        el.addEventListener('mouseenter', () => { inner.style.transform = 'scale(1.15)'; inner.style.boxShadow = `0 4px 20px rgba(0,0,0,0.6), 0 0 0 2px ${ANNOTATION_COLORS.target_zone}40`; });
-        el.addEventListener('mouseleave', () => { inner.style.transform = 'scale(1)'; inner.style.boxShadow = '0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2)'; });
+        el.addEventListener('mouseenter', () => { inner.style.transform = 'scale(1.15)'; inner.style.boxShadow = `0 4px 20px rgba(0,0,0,0.5), 0 0 0 2px ${ANNOTATION_COLORS.target_zone}40`; });
+        el.addEventListener('mouseleave', () => { inner.style.transform = 'scale(1)'; inner.style.boxShadow = '0 2px 12px rgba(0,0,0,0.4), 0 0 0 2px rgba(0,0,0,0.15)'; });
         const handleClick = (e: Event) => { e.stopPropagation(); onAnnotationClick(ann); };
         el.addEventListener('click', handleClick);
         el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(e); } });
@@ -77,7 +77,7 @@ export function AnnotationRenderer({
           justify-content: center; font-size: 14px; font-weight: 700;
           color: white; border: 2px solid rgba(255,255,255,0.25);
           font-family: ${MARKER_FONT};
-          box-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 0 2px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 12px rgba(0,0,0,0.4), 0 0 0 2px rgba(0,0,0,0.15);
           transition: transform 0.15s ${EASE_OUT};
           will-change: transform;
         `;
@@ -103,15 +103,15 @@ export function AnnotationRenderer({
         el.style.cssText = `cursor: pointer;`;
         const outer = document.createElement('div');
         outer.style.cssText = `
-          width: 24px; height: 24px; background: white; border-radius: 50% 50% 50% 0;
+          width: 24px; height: 24px; background: ${ANNOTATION_COLORS.note}; border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
-          box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+          box-shadow: 0 2px 10px rgba(0,0,0,0.4);
           display: flex; align-items: center; justify-content: center;
           transition: transform 0.15s ${EASE_OUT};
           will-change: transform;
         `;
         const inner = document.createElement('span');
-        inner.style.cssText = `transform: rotate(45deg); font-size: 10px; font-weight: 600; color: #06060c; font-family: ${MARKER_FONT};`;
+        inner.style.cssText = `transform: rotate(45deg); font-size: 10px; font-weight: 600; color: #1a1712; font-family: ${MARKER_FONT};`;
         inner.textContent = ann.label;
         outer.appendChild(inner);
         el.appendChild(outer);
@@ -152,7 +152,7 @@ export function AnnotationRenderer({
           id: ann.id,
           type: ann.type,
           color: ANNOTATION_COLORS[ann.type],
-          label: ann.type === 'isobath' ? `${ann.depth}m` : `${ann.shallowDepth}→${ann.deepDepth}m`,
+          label: ann.type === 'isobath' ? `${ann.depth}m` : `${ann.shallowDepth}\u2192${ann.deepDepth}m`,
         },
         geometry: {
           type: 'LineString',

@@ -62,29 +62,41 @@ export function DeleteConfirmDialog({
     >
       {/* Overlay */}
       <div
-        className="absolute inset-0 bg-black/65 backdrop-blur-sm"
+        className="absolute inset-0 backdrop-blur-sm"
         onClick={onCancel}
-        style={{ animation: 'dialog-overlay 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        style={{
+          background: 'rgba(26, 23, 18, 0.7)',
+          animation: 'dialog-overlay 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
       />
 
       {/* Panel */}
       <div
         ref={dialogRef}
         className="relative w-full max-w-sm rounded-2xl p-6 shadow-2xl ring-1 ring-[var(--border)] backdrop-blur-xl"
-        style={{ background: 'rgba(17, 17, 36, 0.85)', animation: 'dialog-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1)' }}
+        style={{
+          background: 'rgba(44, 40, 32, 0.92)',
+          animation: 'dialog-enter 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
       >
+        {/* Ruled line at top */}
+        <div className="absolute inset-x-6 top-0 h-px" style={{ backgroundColor: 'rgba(205, 180, 140, 0.1)' }} />
+
         <h3 id="delete-dialog-title" className="mb-2 text-[15px] font-semibold text-[var(--text-primary)]">
-          Supprimer l'annotation
+          Supprimer l&apos;annotation
         </h3>
         <p id="delete-dialog-desc" className="mb-6 text-[13px] leading-relaxed text-[var(--text-secondary)]">
           Voulez-vous vraiment supprimer <strong className="font-semibold text-[var(--text-primary)]">{label}</strong> ?
-          Cette action est irréversible.
+          Cette action est irr&eacute;versible.
         </p>
         <div className="flex justify-end gap-2">
           <button
             ref={cancelRef}
             onClick={onCancel}
-            className="btn-press rounded-xl bg-white/6 px-4 py-2.5 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-150 hover:bg-white/10"
+            className="btn-press rounded-xl px-4 py-2.5 text-[13px] font-medium text-[var(--text-secondary)] transition-colors duration-150"
+            style={{ backgroundColor: 'rgba(205, 180, 140, 0.06)' }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.1)')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.06)')}
           >
             Annuler
           </button>

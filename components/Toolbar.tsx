@@ -21,7 +21,7 @@ const TOOLS: Tool[] = [
 ];
 
 function ToolIcon({ tool, active }: { tool: Tool; active: boolean }) {
-  const color = active ? '#ffffff' : 'var(--text-secondary, #8888a0)';
+  const color = active ? '#ede6db' : 'var(--text-secondary, #a89882)';
   const size = 16;
 
   switch (tool) {
@@ -77,7 +77,7 @@ function ToolIcon({ tool, active }: { tool: Tool; active: boolean }) {
 }
 
 function getToolColor(tool: Tool): string | undefined {
-  if (tool === 'pointer' || tool === 'note') return undefined;
+  if (tool === 'pointer') return undefined;
   return ANNOTATION_COLORS[tool];
 }
 
@@ -105,8 +105,8 @@ export function Toolbar({ activeTool, onToolChange }: ToolbarProps) {
       <div
         role="toolbar"
         aria-label="Outils d'annotation"
-        className="flex items-center gap-px rounded-2xl p-1 shadow-xl shadow-black/40 ring-1 ring-[var(--border)] backdrop-blur-xl"
-        style={{ background: 'rgba(10, 10, 22, 0.7)' }}
+        className="flex items-center gap-px rounded-2xl p-1 shadow-xl shadow-black/30 ring-1 ring-[var(--border)] backdrop-blur-xl"
+        style={{ background: 'rgba(34, 31, 25, 0.85)' }}
       >
         {TOOLS.map((tool, i) => {
           const isActive = activeTool === tool;
@@ -123,10 +123,15 @@ export function Toolbar({ activeTool, onToolChange }: ToolbarProps) {
               tabIndex={isActive ? 0 : -1}
               className={`btn-press relative flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-[11px] font-medium tracking-wide transition-all duration-150 ${
                 isActive
-                  ? 'bg-white/12 text-white'
-                  : 'text-[var(--text-secondary)] hover:bg-white/6 hover:text-[var(--text-primary)]'
+                  ? 'text-[var(--text-primary)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               }`}
-              style={isActive && accentColor ? { boxShadow: `inset 0 -2px 0 0 ${accentColor}` } : undefined}
+              style={{
+                backgroundColor: isActive ? 'rgba(212, 145, 92, 0.12)' : undefined,
+                boxShadow: isActive && accentColor
+                  ? `0 2px 8px rgba(212, 145, 92, 0.3), inset 0 -2px 0 0 ${accentColor}`
+                  : undefined,
+              }}
             >
               <ToolIcon tool={tool} active={isActive} />
               <span className="hidden lg:inline">{TOOL_LABELS[tool]}</span>
@@ -139,12 +144,17 @@ export function Toolbar({ activeTool, onToolChange }: ToolbarProps) {
         <div
           role="status"
           aria-live="polite"
-          className="rounded-xl px-4 py-2 text-xs font-medium text-[var(--text-secondary)] shadow-lg shadow-black/30 ring-1 ring-[var(--border)] backdrop-blur-xl"
-          style={{ background: 'rgba(10, 10, 22, 0.75)' }}
+          className="rounded-xl px-4 py-2 text-xs font-medium text-[var(--text-secondary)] shadow-lg shadow-black/20 ring-1 ring-[var(--border)] backdrop-blur-xl"
+          style={{
+            background: 'rgba(34, 31, 25, 0.85)',
+            animation: 'slide-down 150ms ease-out',
+          }}
         >
           {instruction}
-          <span className="mx-1.5 text-[var(--text-tertiary)]">·</span>
-          <kbd className="rounded-md bg-white/8 px-1.5 py-0.5 font-mono text-[10px] font-medium text-[var(--text-tertiary)]">Échap</kbd>
+          <span className="mx-1.5 text-[var(--text-tertiary)]">&middot;</span>
+          <kbd className="rounded-md px-1.5 py-0.5 font-mono text-[10px] font-medium text-[var(--text-tertiary)]" style={{ background: 'rgba(205, 180, 140, 0.08)' }}>
+            \u00c9chap
+          </kbd>
           <span className="ml-1 text-[var(--text-tertiary)]">pour annuler</span>
         </div>
       )}

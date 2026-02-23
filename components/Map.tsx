@@ -9,9 +9,10 @@ import { MAP_CONFIG } from '@/lib/constants';
 
 interface MapProps {
   onMapReady: (map: mapboxgl.Map) => void;
+  initialZoom?: number;
 }
 
-export function Map({ onMapReady }: MapProps) {
+export function Map({ onMapReady, initialZoom }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
@@ -24,7 +25,7 @@ export function Map({ onMapReady }: MapProps) {
       container: containerRef.current,
       style: MAP_CONFIG.style,
       center: MAP_CONFIG.center,
-      zoom: MAP_CONFIG.zoom,
+      zoom: initialZoom ?? MAP_CONFIG.zoom,
       minZoom: MAP_CONFIG.minZoom,
       maxZoom: MAP_CONFIG.maxZoom,
       doubleClickZoom: false,
@@ -34,7 +35,7 @@ export function Map({ onMapReady }: MapProps) {
       accessToken: mapboxgl.accessToken as string,
       mapboxgl: mapboxgl as any,
       marker: false,
-      placeholder: 'Rechercher un lieu…',
+      placeholder: 'Rechercher un lieu\u2026',
       collapsed: true,
     });
     map.addControl(geocoder, 'top-left');
@@ -58,7 +59,7 @@ export function Map({ onMapReady }: MapProps) {
       map.remove();
       mapRef.current = null;
     };
-  }, [onMapReady]);
+  }, [onMapReady, initialZoom]);
 
   useEffect(() => {
     const cleanup = initMap();

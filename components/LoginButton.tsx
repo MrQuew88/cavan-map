@@ -14,10 +14,13 @@ export function LoginButton() {
       </span>
       <button
         onClick={() => signOut({ callbackUrl: '/login' })}
-        aria-label="Se déconnecter"
-        className="btn-press rounded-lg bg-white/5 px-3 py-1.5 text-[11px] font-medium text-[var(--text-tertiary)] ring-1 ring-[var(--border)] transition-all duration-150 hover:bg-white/8 hover:text-[var(--text-secondary)] hover:ring-[var(--border-hover)]"
+        aria-label="Se d\u00e9connecter"
+        className="btn-press rounded-lg px-3 py-1.5 text-[11px] font-medium text-[var(--text-tertiary)] ring-1 ring-[var(--border)] transition-all duration-150 hover:text-[var(--text-secondary)] hover:ring-[var(--border-hover)]"
+        style={{ backgroundColor: 'rgba(205, 180, 140, 0.05)' }}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.08)')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(205, 180, 140, 0.05)')}
       >
-        Déconnexion
+        D\u00e9connexion
       </button>
     </div>
   );
